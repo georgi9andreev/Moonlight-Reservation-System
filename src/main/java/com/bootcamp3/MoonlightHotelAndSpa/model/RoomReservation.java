@@ -8,6 +8,7 @@ import java.time.Instant;
 public class RoomReservation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Instant createdAt;
