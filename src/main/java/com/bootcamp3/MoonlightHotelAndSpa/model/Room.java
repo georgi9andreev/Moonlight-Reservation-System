@@ -13,7 +13,7 @@ public class Room {
 
     private String roomType;
     private String roomView;
-    private double price;
+    private Double price;
 
     @OneToOne(mappedBy = "room")
     private RoomReservation roomReservation;
@@ -21,7 +21,7 @@ public class Room {
     public Room() {
     }
 
-    public Room(Long id, String roomType, String roomView, double price, RoomReservation roomReservation) {
+    public Room(Long id, String roomType, String roomView, Double price, RoomReservation roomReservation) {
         this.id = id;
         this.roomType = roomType;
         this.roomView = roomView;
@@ -53,7 +53,7 @@ public class Room {
         this.roomView = roomView;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 

@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -11,6 +12,9 @@ public class Role {
     private Long id;
 
     private String authority;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> user;
 
     public Role() {
     }

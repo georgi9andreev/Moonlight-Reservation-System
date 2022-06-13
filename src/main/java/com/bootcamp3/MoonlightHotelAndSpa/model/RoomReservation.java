@@ -20,7 +20,7 @@ public class RoomReservation {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private double totalPrice;
+    private Double totalPrice;
     private String bedType;
 
     @OneToOne
@@ -31,7 +31,7 @@ public class RoomReservation {
     }
 
     public RoomReservation(Long id, Instant createdAt, Instant checkIn, Instant checkOut, int guests,
-                           User user, double totalPrice, String bedType, Room room) {
+                           User user, Double totalPrice, String bedType, Room room) {
         this.id = id;
         this.createdAt = createdAt;
         this.checkIn = checkIn;
@@ -91,11 +91,11 @@ public class RoomReservation {
         this.user = user;
     }
 
-    public double getTotalPrice() {
+    public Double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
