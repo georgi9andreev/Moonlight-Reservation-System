@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -15,13 +16,13 @@ public class Room {
     private String roomView;
     private Double price;
 
-    @OneToOne(mappedBy = "room")
-    private RoomReservation roomReservation;
+    @OneToMany(mappedBy = "room")
+    private List<RoomReservation> roomReservation;
 
     public Room() {
     }
 
-    public Room(Long id, String roomType, String roomView, Double price, RoomReservation roomReservation) {
+    public Room(Long id, String roomType, String roomView, Double price, List<RoomReservation> roomReservation) {
         this.id = id;
         this.roomType = roomType;
         this.roomView = roomView;
@@ -57,15 +58,15 @@ public class Room {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public RoomReservation getRoomReservation() {
+    public List<RoomReservation> getRoomReservation() {
         return roomReservation;
     }
 
-    public void setRoomReservation(RoomReservation roomReservation) {
+    public void setRoomReservation(List<RoomReservation> roomReservation) {
         this.roomReservation = roomReservation;
     }
 }
