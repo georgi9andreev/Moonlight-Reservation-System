@@ -23,7 +23,7 @@ public class RoomReservation {
     private Double totalPrice;
     private String bedType;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
