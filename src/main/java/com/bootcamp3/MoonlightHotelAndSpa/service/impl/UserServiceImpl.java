@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
         Role role = new Role();
         role.setAuthority("Client");
-        roleService.save(role);
+
 
         User user = new User();
         user.setFirstName(firstName);
@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder(password));
         user.setCreatedAt(Instant.now());
         user.setRoles(Set.of(role));
+
+        role.setUser(Set.of(user));
+        roleService.save(role);
 
         userRepository.save(user);
 

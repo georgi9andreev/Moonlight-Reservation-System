@@ -1,5 +1,8 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -14,6 +17,9 @@ public class Role {
     private String authority;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Set<User> user;
 
     public Role() {
