@@ -1,5 +1,8 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.HashSet;
@@ -26,6 +29,9 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
     private Set<Role> roles = new HashSet<>();
 
     private Instant createdAt;
