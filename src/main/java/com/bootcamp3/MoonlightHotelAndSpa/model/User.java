@@ -2,16 +2,16 @@ package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class User {
             property = "id")
     private Set<Role> roles = new HashSet<>();
 
-    private Instant createdAt;
+    private Date createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RoomReservation> reservations;
@@ -43,7 +43,7 @@ public class User {
     }
 
     public User(Long id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles,
-                Instant createdAt, List<RoomReservation> reservations) {
+                Date createdAt, List<RoomReservation> reservations) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -95,10 +95,6 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -111,11 +107,11 @@ public class User {
         this.roles = roles;
     }
 
-    public Instant getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -125,5 +121,48 @@ public class User {
 
     public void setReservations(List<RoomReservation> reservations) {
         this.reservations = reservations;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            String name = role.getAuthority().toUpperCase();
+            if (!name.startsWith("ROLE_")) {
+                name = "ROLE_" + name;
+            }
+            authorities.add(new SimpleGrantedAuthority(name));
+        }
+
+        return authorities;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -3,7 +3,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.dto;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Role;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 
-import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -15,14 +15,14 @@ public class UserDto {
     private String email;
     private String phoneNumber;
     private Set<Role> roles;
-    private Instant createdAt;
+    private Date createdAt;
     private List<RoomReservation> reservations;
 
     public UserDto() {
     }
 
     public UserDto(Long id, String firstName, String lastName, String email, String phoneNumber,
-                   Set<Role> roles, Instant createdAt, List<RoomReservation> reservations) {
+                   Set<Role> roles, Date createdAt, List<RoomReservation> reservations) {
         Id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -81,11 +81,11 @@ public class UserDto {
         this.roles = roles;
     }
 
-    public Instant getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
