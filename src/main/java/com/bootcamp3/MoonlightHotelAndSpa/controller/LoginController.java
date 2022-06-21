@@ -33,7 +33,6 @@ public class LoginController {
         String token = loginService.login(authenticationRequest);
         UserDto user = UserConverter.convertToUserDto(userService.loadUserByUsername(authenticationRequest.getUsername()));
 
-
         return new ResponseEntity<>(new AuthenticationResponse(token, user), HttpStatus.OK);
     }
 }
