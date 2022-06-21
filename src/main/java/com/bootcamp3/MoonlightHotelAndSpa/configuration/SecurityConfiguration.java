@@ -28,8 +28,14 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                        .mvcMatchers("/user/register").permitAll()
-                        .mvcMatchers("/user/token").permitAll()
+                        .mvcMatchers("/users").permitAll()
+                        .mvcMatchers("/users/token").permitAll()
+                        .mvcMatchers("/v3/api-docs",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/v3/api-docs",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**").permitAll()
                         .anyRequest().denyAll())
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
