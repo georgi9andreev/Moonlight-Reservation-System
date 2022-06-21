@@ -1,60 +1,37 @@
 package com.bootcamp3.MoonlightHotelAndSpa.dto;
 
-import com.bootcamp3.MoonlightHotelAndSpa.model.Role;
-import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
-
-import java.util.Date;
-import java.util.List;
+import java.time.Instant;
 import java.util.Set;
 
 public class UserDto {
 
-    private Long Id;
-    private String firstName;
-    private String lastName;
+    private Long id;
     private String email;
-    private String phoneNumber;
-    private Set<Role> roles;
-    private Date createdAt;
-    private List<RoomReservation> reservations;
+    private String name;
+    private String surname;
+    private String phone;
+    private Set<String> roles;
+    private Instant created;
 
     public UserDto() {
     }
 
-    public UserDto(Long id, String firstName, String lastName, String email, String phoneNumber,
-                   Set<Role> roles, Date createdAt, List<RoomReservation> reservations) {
-        Id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public UserDto(Long id, String email, String name, String surname, String phone, Set<String> roles, Instant created) {
+        this.id = id;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
         this.roles = roles;
-        this.createdAt = createdAt;
-        this.reservations = reservations;
+        this.created = created;
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.id = id;
     }
 
     public String getEmail() {
@@ -65,35 +42,43 @@ public class UserDto {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getName() {
+        return name;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Set<Role> getRoles() {
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Instant getCreated() {
+        return created;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<RoomReservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<RoomReservation> reservations) {
-        this.reservations = reservations;
+    public void setCreated(Instant created) {
+        this.created = created;
     }
 }

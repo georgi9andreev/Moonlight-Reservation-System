@@ -10,13 +10,12 @@ public class UserConverter {
         UserDto userDto = new UserDto();
 
         userDto.setId(user.getId());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
-        userDto.setPhoneNumber(user.getPhoneNumber());
-        userDto.setRoles(user.getRoles());
-        userDto.setCreatedAt(user.getCreatedAt());
-        userDto.setReservations(user.getReservations());
+        userDto.setName(user.getFirstName());
+        userDto.setSurname(user.getLastName());
+        userDto.setPhone(user.getPhoneNumber());
+        userDto.setRoles(user.getAuthorityName());
+        userDto.setCreated(user.getCreatedAt());
 
         return userDto;
     }

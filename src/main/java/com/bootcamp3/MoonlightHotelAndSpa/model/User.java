@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.*;
 
 @Entity
@@ -34,7 +35,7 @@ public class User implements UserDetails {
             property = "id")
     private Set<Role> roles = new HashSet<>();
 
-    private Date createdAt;
+    private Instant createdAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RoomReservation> reservations;
@@ -43,7 +44,7 @@ public class User implements UserDetails {
     }
 
     public User(Long id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles,
-                Date createdAt, List<RoomReservation> reservations) {
+                Instant createdAt, List<RoomReservation> reservations) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -107,11 +108,11 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -132,6 +133,17 @@ public class User implements UserDetails {
                 name = "ROLE_" + name;
             }
             authorities.add(new SimpleGrantedAuthority(name));
+        }
+
+        return authorities;
+    }
+
+    public Set<String> getAuthorityName() {
+        Set<String> authorities = new HashSet<>();
+        for (Role role : roles) {
+            String name = role.getAuthority().toUpperCase();
+
+            authorities.add(name);
         }
 
         return authorities;

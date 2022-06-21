@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.Set;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.USER_NOT_FOUND;
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setPassword(passwordEncoder(password));
-        user.setCreatedAt(Date.from(Instant.now()));
+        user.setCreatedAt(Instant.now());
         user.setRoles(Set.of(role));
 
         role.setUser(Set.of(user));

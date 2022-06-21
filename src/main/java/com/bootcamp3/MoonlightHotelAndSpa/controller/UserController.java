@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/users")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
@@ -21,7 +21,7 @@ public class UserController {
         this.userServiceImpl = userServiceImpl;
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping
     public ResponseEntity<User> register(@RequestBody User user) {
         User newUser =  userServiceImpl.register(user.getFirstName(), user.getLastName(), user.getEmail(),
                 user.getPhoneNumber(), user.getPassword());
