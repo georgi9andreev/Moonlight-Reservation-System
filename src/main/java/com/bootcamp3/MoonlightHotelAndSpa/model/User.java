@@ -2,16 +2,17 @@ package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,10 +96,6 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -125,5 +122,59 @@ public class User {
 
     public void setReservations(List<RoomReservation> reservations) {
         this.reservations = reservations;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            String name = role.getAuthority().toUpperCase();
+            if (!name.startsWith("ROLE_")) {
+                name = "ROLE_" + name;
+            }
+            authorities.add(new SimpleGrantedAuthority(name));
+        }
+
+        return authorities;
+    }
+
+    public Set<String> getAuthorityName() {
+        Set<String> authorities = new HashSet<>();
+        for (Role role : roles) {
+            String name = role.getAuthority().toUpperCase();
+
+            authorities.add(name);
+        }
+
+        return authorities;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

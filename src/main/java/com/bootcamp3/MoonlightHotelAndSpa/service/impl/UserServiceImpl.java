@@ -1,18 +1,22 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
+import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Role;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.UserRepository;
 import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Set;
 
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.USER_NOT_FOUND;
+
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleServiceImpl roleService;
@@ -30,7 +34,6 @@ public class UserServiceImpl implements UserService {
 
         Role role = new Role();
         role.setAuthority("Client");
-
 
         User user = new User();
         user.setFirstName(firstName);
@@ -51,5 +54,12 @@ public class UserServiceImpl implements UserService {
 
     private String passwordEncoder(String password) {
         return bCryptPasswordEncoder.encode(password);
+    }
+
+    @Override
+    public User loadUserByUsername(String username) {
+
+        return userRepository.findUserByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
     }
 }

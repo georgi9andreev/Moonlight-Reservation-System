@@ -4,8 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
-//Spring security excluded for test purposes
-//Remove when spring security configured
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
 public class MoonlightHotelAndSpaApplication {
 

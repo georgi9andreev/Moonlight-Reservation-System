@@ -1,5 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
+import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.UserDto;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/users")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
@@ -21,12 +23,12 @@ public class UserController {
         this.userServiceImpl = userServiceImpl;
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
+    @PostMapping
+    public ResponseEntity<UserDto> register(@RequestBody User user) {
         User newUser =  userServiceImpl.register(user.getFirstName(), user.getLastName(), user.getEmail(),
                 user.getPhoneNumber(), user.getPassword());
 
-        return new ResponseEntity<>(newUser, HttpStatus.OK);
+        UserDto responseUser = UserConverter.convertToUserDto(newUser);
+        return new ResponseEntity<>(responseUser, HttpStatus.OK);
     }
-
 }
