@@ -14,7 +14,7 @@ public class UserConverter {
         userDto.setName(user.getFirstName());
         userDto.setSurname(user.getLastName());
         userDto.setPhone(user.getPhoneNumber());
-        userDto.setRoles(user.getAuthorityName());
+        userDto.setRoles(RolePrefixConverter.removePrefix(user.getAuthorityName()));
         userDto.setCreated(user.getCreatedAt());
 
         return userDto;
