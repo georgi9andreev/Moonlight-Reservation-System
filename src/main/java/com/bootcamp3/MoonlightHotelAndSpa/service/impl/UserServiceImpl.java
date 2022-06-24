@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.USER_NOT_FOUND;
@@ -30,10 +31,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String email, String phoneNumber, String password) {
+    public User register(String firstName, String lastName, String email, String phoneNumber, String password,
+                         Set<String> role) {
 
-        Role role = new Role();
-        role.setAuthority("Client");
+        String roleString = role.iterator().next();
+        Role foundRole = roleService.findRoleByAuthority(roleString);
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(foundRole);
 
         User user = new User();
         user.setFirstName(firstName);
@@ -42,18 +47,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPhoneNumber(phoneNumber);
         user.setPassword(passwordEncoder(password));
         user.setCreatedAt(Instant.now());
-        user.setRoles(Set.of(role));
-
-        role.setUser(Set.of(user));
-        roleService.save(role);
+        user.setRoles(roles);
 
         userRepository.save(user);
 
         return user;
-    }
-
-    private String passwordEncoder(String password) {
-        return bCryptPasswordEncoder.encode(password);
     }
 
     @Override
@@ -61,5 +59,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         return userRepository.findUserByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+    }
+
+    private User validateEmail(String email) {
+        return null;
+    }
+
+    private String passwordEncoder(String password) {
+        return bCryptPasswordEncoder.encode(password);
     }
 }
