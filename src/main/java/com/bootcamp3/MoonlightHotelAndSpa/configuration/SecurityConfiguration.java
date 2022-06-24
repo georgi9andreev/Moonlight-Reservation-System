@@ -29,6 +29,7 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests(authorize -> authorize
                         .mvcMatchers("/users").permitAll()
+                        .mvcMatchers("/users/*").permitAll()
                         .mvcMatchers("/users/token").permitAll()
                         .mvcMatchers("/v3/api-docs",
                                 "/swagger-ui/**",

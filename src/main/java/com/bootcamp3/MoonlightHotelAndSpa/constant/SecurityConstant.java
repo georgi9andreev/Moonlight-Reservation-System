@@ -11,4 +11,5 @@ public class SecurityConstant {
     public static final String BEARER_PREFIX_MISSING = "JWT Token does not begin with Bearer String";
     public static final String TOKEN_EXPIRED = "JWT Token has expired";
     public static final String UNABLE_TO_GET_JWT = "Unable to get JWT Token";
+    public static final String ADMIN = "ROLE_ADMIN";
 }
