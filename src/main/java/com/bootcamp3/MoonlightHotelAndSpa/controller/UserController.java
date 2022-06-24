@@ -2,6 +2,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserDto;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> register(@RequestBody User user) {
-        User newUser =  userServiceImpl.register(user.getFirstName(), user.getLastName(), user.getEmail(),
-                user.getPhoneNumber(), user.getPassword());
+    public ResponseEntity<UserDto> register(@RequestBody UserRequest userRequest) {
+        User newUser =  userServiceImpl.register(userRequest.getName(), userRequest.getSurname(),
+                userRequest.getEmail(), userRequest.getPhone(), userRequest.getPassword(), userRequest.getRole());
 
         UserDto responseUser = UserConverter.convertToUserDto(newUser);
         return new ResponseEntity<>(responseUser, HttpStatus.OK);
