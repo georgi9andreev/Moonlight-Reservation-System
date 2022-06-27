@@ -18,7 +18,7 @@ public interface UserService {
 //    User updateUser(String newFirstName, String newLastName, String newEmail, String newPhoneNumber,
 //                    String newPassword);
 //
-//    void deleteUser(Long id);
+    void deleteUserById(Long id);
 //
 //    void resetPassword(String email);
 }

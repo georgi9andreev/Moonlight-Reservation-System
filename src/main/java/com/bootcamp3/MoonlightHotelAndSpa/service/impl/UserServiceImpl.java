@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
+import com.bootcamp3.MoonlightHotelAndSpa.converter.RolePrefixConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Role;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                          Set<String> role) {
 
         String roleString = role.iterator().next();
-        Role foundRole = roleService.findRoleByAuthority(roleString);
+        Role foundRole = roleService.findRoleByAuthority(RolePrefixConverter.addPrefix(roleString));
 
         Set<Role> roles = new HashSet<>();
         roles.add(foundRole);
@@ -52,6 +53,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(user);
 
         return user;
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override
