@@ -9,19 +9,19 @@ public class UserRequest {
     private String name;
     private String surname;
     private String phone;
-    private Set<String> role;
+    private Set<String> roles;
 
     public UserRequest() {
     }
 
     public UserRequest(String email, String password, String name, String surname, String phone,
-                       Set<String> role) {
+                       Set<String> roles) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.phone = phone;
-        this.role = role;
+        this.roles = roles;
     }
 
     public String getEmail() {
@@ -64,11 +64,11 @@ public class UserRequest {
         this.phone = phone;
     }
 
-    public Set<String> getRole() {
-        return role;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setRole(Set<String> role) {
-        this.role = role;
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 }

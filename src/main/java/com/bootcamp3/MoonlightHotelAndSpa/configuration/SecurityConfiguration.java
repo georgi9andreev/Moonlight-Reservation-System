@@ -28,10 +28,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                        .mvcMatchers("/users").permitAll()
-                        .mvcMatchers("/users/*").permitAll()
-                        .mvcMatchers("/users/token").permitAll()
-                        .mvcMatchers("/v3/api-docs",
+                        .antMatchers("/users").permitAll()
+                        .antMatchers("/users/*").permitAll()
+                        .antMatchers("/users/token").permitAll()
+                        .antMatchers("/v3/api-docs",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/v3/api-docs",

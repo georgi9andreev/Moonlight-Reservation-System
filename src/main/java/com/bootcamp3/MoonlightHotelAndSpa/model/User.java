@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
+import com.bootcamp3.MoonlightHotelAndSpa.exception.InvalidPhoneNumber;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,8 +8,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.*;
+
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.UserConstant.ROLE_PREFIX;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.*;
 
 @Entity
 @Table(name = "users")
@@ -18,10 +24,21 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min = 2, max = 255)
     private String firstName;
+
+    @Size(min = 2, max = 255)
     private String lastName;
+
+    @Column(unique = true)
+    @Email(message = INVALID_EMAIL)
+    @Size(min = 5, max = 255)
     private String email;
+
+    @Column(unique = true)
+    @Size(max = 15, message = INVALID_PHONE_SIZE)
     private String phoneNumber;
+
     private String password;
 
     @ManyToMany
@@ -93,7 +110,12 @@ public class User implements UserDetails {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+
+        if (phoneNumber.startsWith("+") || phoneNumber.startsWith("00")) {
+            this.phoneNumber = phoneNumber;
+        } else {
+            throw new InvalidPhoneNumber(INVALID_PHONE);
+        }
     }
 
     public void setPassword(String password) {
@@ -129,8 +151,8 @@ public class User implements UserDetails {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (Role role : roles) {
             String name = role.getAuthority().toUpperCase();
-            if (!name.startsWith("ROLE_")) {
-                name = "ROLE_" + name;
+            if (!name.startsWith(ROLE_PREFIX)) {
+                name = ROLE_PREFIX + name;
             }
             authorities.add(new SimpleGrantedAuthority(name));
         }
