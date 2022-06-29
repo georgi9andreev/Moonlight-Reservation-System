@@ -54,7 +54,7 @@ public class UserController {
         }
     }
 
-    @Secured("ROLE_ADMIN")
+    @Secured("admin")
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable Long id) {
 

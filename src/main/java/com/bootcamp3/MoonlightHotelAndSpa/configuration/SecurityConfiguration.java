@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+
     private final JwtTokenFilter tokenFilter;
 
     @Autowired
@@ -29,8 +30,8 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests(authorize -> authorize
                         .antMatchers("/users").permitAll()
-                        .antMatchers("/users/*").permitAll()
                         .antMatchers("/users/token").permitAll()
+                        .antMatchers("/users/*").hasAnyAuthority("ROLE_ADMIN")
                         .antMatchers("/v3/api-docs",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
