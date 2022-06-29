@@ -9,10 +9,15 @@ import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.USER_NOT_FOUND;
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -26,12 +31,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> register(@RequestBody UserRequest userRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<UserDto> register(@Valid @RequestBody UserRequest userRequest) {
         User newUser =  userServiceImpl.register(userRequest.getName(), userRequest.getSurname(),
-                userRequest.getEmail(), userRequest.getPhone(), userRequest.getPassword(), userRequest.getRole());
+                userRequest.getEmail(), userRequest.getPhone(), userRequest.getPassword(), userRequest.getRoles());
 
         UserDto responseUser = UserConverter.convertToUserDto(newUser);
-        return new ResponseEntity<>(responseUser, HttpStatus.OK);
+        return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN')")
@@ -44,7 +50,35 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
 
-            throw new UserNotFoundException(USER_NOT_FOUND);
+            throw new UserNotFoundException(BAD_CREDENTIALS);
         }
+    }
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<UserDto> findById(@PathVariable Long id) {
+
+        UserDto user = UserConverter.convertToUserDto(userServiceImpl.findUserById(id));
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Set<UserDto>> findAll() {
+        Set<UserDto> userDtos = new HashSet<>();
+
+        for (User user : userServiceImpl.getUsers()) {
+            userDtos.add(UserConverter.convertToUserDto(user));
+        }
+
+        return ResponseEntity.ok(userDtos);
+    }
+
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+
+        UserDto user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

@@ -22,6 +22,7 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.SecurityConstant.*;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
+
     private final JwtTokenUtil jwtTokenUtil;
     private final UserServiceImpl userService;
 

@@ -4,6 +4,7 @@ public class SecurityConstant {
 
     public static final Long JWT_TOKEN_VALIDITY = 10 * 60 * 60L;
     public static final String AUTHORITIES = "authorities";
+    public static final String USERNAME = "username";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String AUTHORIZATION = "Authorization";
     public static final String BLANK_USERNAME_OR_PASSWORD = "Username or password should not be empty.";

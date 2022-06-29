@@ -3,32 +3,31 @@ package com.bootcamp3.MoonlightHotelAndSpa.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.function.Function;
 
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.SecurityConstant.AUTHORITIES;
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.SecurityConstant.JWT_TOKEN_VALIDITY;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.SecurityConstant.*;
 
 @Component
 public class JwtTokenUtil {
 
-
-    SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    @Value("${jwt.secret}")
+    private String secret;
 
     public String generateToken(UserDetails userDetails) {
 
         return Jwts.builder()
                 .setClaims(getClaimsFromUser(userDetails))
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(Instant.now().plus(JWT_TOKEN_VALIDITY, ChronoUnit.SECONDS)))
-                .signWith(key)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
@@ -41,7 +40,7 @@ public class JwtTokenUtil {
 
     private Claims getAllClaimsFromToken(String token) {
 
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {

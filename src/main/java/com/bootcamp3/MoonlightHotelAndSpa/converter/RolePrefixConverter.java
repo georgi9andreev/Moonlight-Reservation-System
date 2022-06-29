@@ -14,6 +14,6 @@ public class RolePrefixConverter {
 
     public static String addPrefix(String role) {
 
-        return ROLE_PREFIX + role.toUpperCase();
+       return role.contains(ROLE_PREFIX) ? role.toUpperCase() : (ROLE_PREFIX + role.toUpperCase());
     }
 }

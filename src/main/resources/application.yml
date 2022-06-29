@@ -13,6 +13,12 @@ spring:
     show-sql: true
 
 
+
+jwt:
+  secret: "Secret903242375jwfkdsf3924239wjfdsfsdf9r8423rwfsdfmsrp928490g312ewdsacxzce4332reefdsfsdf23234"
+
+
+
 #server:
 #  port: 8084
 #
