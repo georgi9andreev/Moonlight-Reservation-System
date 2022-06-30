@@ -55,16 +55,20 @@ public class ExceptionHandling {
                         constraintViolation.getMessage()))
                 .collect(Collectors.toList()));
 
-        ErrorField error = new ErrorField();
-        error.setField_name(messages);
-
-        ErrorResponse errorResponse = new ErrorResponse(VALIDATION_ERROR, error);
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return createHttpErrorResponse(messages);
     }
 
     private ResponseEntity<ErrorMessage> createHttpResponse(String message, HttpStatus httpStatus) {
 
         return new ResponseEntity<>(new ErrorMessage(message), httpStatus);
+    }
+
+    private ResponseEntity<ErrorResponse> createHttpErrorResponse(Set<String> messages) {
+
+        ErrorField error = new ErrorField(messages);
+
+        ErrorResponse errorResponse = new ErrorResponse(VALIDATION_ERROR, error);
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

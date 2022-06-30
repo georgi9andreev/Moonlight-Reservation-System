@@ -1,24 +1,15 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
-public class ErrorResponse {
+public class ErrorResponse extends ErrorMessage{
 
-    private String message;
     private ErrorField errors;
 
     public ErrorResponse() {
     }
 
     public ErrorResponse(String message, ErrorField errors) {
-        this.message = message;
+        super(message);
         this.errors = errors;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public ErrorField getErrors() {

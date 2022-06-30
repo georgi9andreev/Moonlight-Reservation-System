@@ -1,7 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserDto;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.model.AuthenticationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.model.AuthenticationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.LoginService;
@@ -31,7 +31,8 @@ public class LoginController {
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
         String token = loginService.login(authenticationRequest);
-        UserDto user = UserConverter.convertToUserDto(userService.loadUserByUsername(authenticationRequest.getUsername()));
+        UserResponse user = UserConverter
+                .convertToUserDto(userService.loadUserByUsername(authenticationRequest.getUsername()));
 
         return new ResponseEntity<>(new AuthenticationResponse(token, user), HttpStatus.OK);
     }

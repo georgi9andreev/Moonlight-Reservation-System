@@ -50,8 +50,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 System.out.println(TOKEN_EXPIRED);
             }
-        } else {
-            logger.warn(BEARER_PREFIX_MISSING);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
