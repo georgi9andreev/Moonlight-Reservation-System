@@ -1,16 +1,16 @@
-#spring:
-#  datasource:
-#    url: jdbc:mysql://office.nasbg.com:33062/java_bootcamp_3?createDatabaseIfNotExist=true
-#    username: java_bootcamp_3
-#    password: vSzUL2Na&q{g}zW
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL8Dialect
-#    show-sql: true
+spring:
+  datasource:
+    url: jdbc:mysql://office.nasbg.com:33062/java_bootcamp_3?createDatabaseIfNotExist=true
+    username: java_bootcamp_3
+    password: vSzUL2Na&q{g}zW
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
 
 
 
@@ -18,19 +18,19 @@ jwt:
   secret: "Secret903242375jwfkdsf3924239wjfdsfsdf9r8423rwfsdfmsrp928490g312ewdsacxzce4332reefdsfsdf23234"
 
 
-server:
-  port: 8084
-
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/moonlight_hotel_db?createDatabaseIfNotExist=true
-    username: root
-    password: spring
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
+#server:
+#  port: 8084
+#
+#spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/moonlight_hotel_db?createDatabaseIfNotExist=true
+#    username: root
+#    password: spring
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#    show-sql: true
