@@ -1,13 +1,13 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserDto;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 
 public class AuthenticationResponse {
 
     private final String token;
-    private final UserDto user;
+    private final UserResponse user;
 
-    public AuthenticationResponse(String token, UserDto user) {
+    public AuthenticationResponse(String token, UserResponse user) {
         this.token = token;
         this.user = user;
     }
@@ -16,7 +16,7 @@ public class AuthenticationResponse {
         return token;
     }
 
-    public UserDto getUser() {
+    public UserResponse getUser() {
         return user;
     }
 }

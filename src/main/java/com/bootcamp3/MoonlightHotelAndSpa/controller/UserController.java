@@ -1,15 +1,14 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserDto;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,15 +31,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserDto> register(@Valid @RequestBody UserRequest userRequest) {
-        User newUser =  userServiceImpl.register(userRequest.getName(), userRequest.getSurname(),
-                userRequest.getEmail(), userRequest.getPhone(), userRequest.getPassword(), userRequest.getRoles());
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
+        User newUser =  userServiceImpl.register(userRequest);
 
-        UserDto responseUser = UserConverter.convertToUserDto(newUser);
+        UserResponse responseUser = UserConverter.convertToUserDto(newUser);
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
-    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
@@ -54,30 +52,30 @@ public class UserController {
         }
     }
 
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
 
-        UserDto user = UserConverter.convertToUserDto(userServiceImpl.findUserById(id));
+        UserResponse user = UserConverter.convertToUserDto(userServiceImpl.findUserById(id));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Set<UserDto>> findAll() {
-        Set<UserDto> userDtos = new HashSet<>();
+    public ResponseEntity<Set<UserResponse>> findAll() {
+        Set<UserResponse> userResponses = new HashSet<>();
 
         for (User user : userServiceImpl.getUsers()) {
-            userDtos.add(UserConverter.convertToUserDto(user));
+            userResponses.add(UserConverter.convertToUserDto(user));
         }
 
-        return ResponseEntity.ok(userDtos);
+        return ResponseEntity.ok(userResponses);
     }
 
     @PostMapping(value = "/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
 
-        UserDto user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
+        UserResponse user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

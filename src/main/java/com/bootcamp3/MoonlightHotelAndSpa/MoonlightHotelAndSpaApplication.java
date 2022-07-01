@@ -10,5 +10,4 @@ public class MoonlightHotelAndSpaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MoonlightHotelAndSpaApplication.class, args);
 	}
-
 }
