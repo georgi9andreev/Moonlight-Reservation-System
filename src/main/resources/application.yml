@@ -36,17 +36,22 @@ spring:
     url: jdbc:mysql://localhost:3306/moonlight_hotel_db?createDatabaseIfNotExist=true
     username: root
     password: spring
-    mail:
-      host: mail.nasbg.com
-      port: 465
-      username: php@nasbg.com
-      password: 4g13a6q;hRPL
-      properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
+  mail:
+    host: mail.nasbg.com
+    port: 465
+    username: php@nasbg.com
+    password: 4g13a6q;hRPL
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        debug: true
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
 
   jpa:
     hibernate:
