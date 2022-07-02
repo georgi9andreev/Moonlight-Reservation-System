@@ -5,6 +5,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
+import com.bootcamp3.MoonlightHotelAndSpa.service.impl.EmailServiceImpl;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.*;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
 
 @RestController
@@ -23,10 +25,12 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
+    private final EmailServiceImpl emailService;
 
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl) {
+    public UserController(UserServiceImpl userServiceImpl, EmailServiceImpl emailService) {
         this.userServiceImpl = userServiceImpl;
+        this.emailService = emailService;
     }
 
     @PostMapping
@@ -35,6 +39,10 @@ public class UserController {
         User newUser =  userServiceImpl.register(userRequest);
 
         UserResponse responseUser = UserConverter.convertToUserDto(newUser);
+
+        String emailText = String.format(EMAIL_TEXT, userRequest.getName(), userRequest.getPassword());
+        emailService.sendEmail(userRequest.getEmail(), EMAIL_SUBJECT, emailText);
+
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
