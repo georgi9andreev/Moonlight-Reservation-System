@@ -1,6 +1,8 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
+import com.bootcamp3.MoonlightHotelAndSpa.configuration.PasswordEncoder;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -11,20 +13,26 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.USER_NOT_FOUND;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_FORGOT_PASSWORD;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_FORGOT_PASSWORD_SUBJECT;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.*;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.SecurityConstant.*;
+
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
+    private final EmailServiceImpl emailService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, EmailServiceImpl emailService) {
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -60,6 +68,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void forgotPassword(EmailRequest emailRequest) {
+        User user = loadUserByUsername(emailRequest.getEmail());
+        String newPassword = generateNewPassword();
+
+        user.setPassword(PasswordEncoder.encodePassword(newPassword));
+        userRepository.save(user);
+
+        String message = String.format(EMAIL_FORGOT_PASSWORD,user.getFirstName(), newPassword);
+        emailService.sendEmail(emailRequest.getEmail(), EMAIL_FORGOT_PASSWORD_SUBJECT, message);
+    }
+
+    private String generateNewPassword() {
+
+        String chars = RANDOM_PASSWORD_CHARS;
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(RANDOM_PASSWORD_LENGTH);
+
+        for (int i = 0; i < RANDOM_PASSWORD_LENGTH; i++)  {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+
+        return sb.toString();
     }
 
     @Override

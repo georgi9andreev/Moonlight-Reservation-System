@@ -15,7 +15,10 @@ public class SecurityConstant {
     public static final String ADMIN = "ROLE_ADMIN";
     public static final String ACCESS_DENIED_MESSAGE = "Access denied";
 
-    public static final String[] PUBLIC_URLS = {"/users", "/users/token", "/v3/api-docs", "/swagger-ui/**",
+    public static final String[] PUBLIC_URLS = {"/users", "/users/token", "/users/forgot", "/v3/api-docs", "/swagger-ui/**",
             "/v3/api-docs/**", "/swagger-ui.html"};
     public static final String[] PROTECTED_URLS = {"/users/*"};
+
+    public static final String RANDOM_PASSWORD_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-+=/.,()[]{}!@#$%^&*abcdefghijklmnopqrstuvwxyz";
+    public static final int RANDOM_PASSWORD_LENGTH = 10;
 }
