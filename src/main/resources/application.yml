@@ -3,22 +3,22 @@ spring:
     url: jdbc:mysql://office.nasbg.com:33062/java_bootcamp_3?createDatabaseIfNotExist=true
     username: java_bootcamp_3
     password: vSzUL2Na&q{g}zW
-    mail:
-      host: mail.nasbg.com
-      port: 465
-      username: php@nasbg.com
-      password: 4g13a6q;hRPL
-      properties:
-        mail:
-          transport:
-            protocol: smtp
-          debug: true
-          smtp:
-            auth: true
-            ssl:
-              enable: true
-            starttls:
-              enable: true
+  mail:
+    host: mail.nasbg.com
+    port: 465
+    username: php@nasbg.com
+    password: 4g13a6q;hRPL
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        debug: true
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
 
   jpa:
     hibernate:
