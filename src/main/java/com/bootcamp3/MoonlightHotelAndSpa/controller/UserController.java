@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
@@ -31,6 +32,14 @@ public class UserController {
     public UserController(UserServiceImpl userServiceImpl, EmailServiceImpl emailService) {
         this.userServiceImpl = userServiceImpl;
         this.emailService = emailService;
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<HttpStatus> forgotPassword(@RequestBody EmailRequest emailRequest) {
+
+        userServiceImpl.forgotPassword(emailRequest);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping

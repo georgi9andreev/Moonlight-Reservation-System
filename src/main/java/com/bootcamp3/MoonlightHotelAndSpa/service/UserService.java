@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service;
 
+import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 
@@ -16,6 +17,8 @@ public interface UserService {
     User updateUser(Long id, UserRequest userRequest);
 
     void deleteUserById(Long id);
+
+    void forgotPassword(EmailRequest emailRequest);
 
 //    void resetPassword(String email);
 }
