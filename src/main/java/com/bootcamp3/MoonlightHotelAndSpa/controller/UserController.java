@@ -62,7 +62,7 @@ public class UserController {
         try {
             userServiceImpl.deleteUserById(id);
 
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
 
             throw new UserNotFoundException(BAD_CREDENTIALS);
