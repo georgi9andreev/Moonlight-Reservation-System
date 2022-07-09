@@ -1,6 +1,11 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,22 +17,59 @@ public class Room {
     @Column(name = "id")
     private Long id;
 
-    private String roomType;
-    private String roomView;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private RoomType title;
+
+    @NotNull
+    private String image;
+
+    @NotNull
+    private ArrayList<String> images;
+
+    @NotNull
+    private String description;
+
+//    @NotNull
+//    @Enumerated(EnumType.STRING)
+//    private BedType facilities;
+
+    @NotNull
+    private Integer area;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private RoomView roomView;
+
+    @NotNull
+    private Integer people;
+
+    @NotNull
     private Double price;
 
     @OneToMany(mappedBy = "room")
     private List<RoomReservation> roomReservation;
 
+    private Integer count;
+
     public Room() {
     }
 
-    public Room(Long id, String roomType, String roomView, Double price, List<RoomReservation> roomReservation) {
+    public Room(Long id, @NotNull RoomType title, @NotNull String image, @NotNull ArrayList<String> images,
+                @NotNull String description, @NotNull Integer area, @NotNull RoomView roomView,
+                @NotNull Integer people, @NotNull Double price, List<RoomReservation> roomReservation,
+                Integer count) {
         this.id = id;
-        this.roomType = roomType;
+        this.title = title;
+        this.image = image;
+        this.images = images;
+        this.description = description;
+        this.area = area;
         this.roomView = roomView;
+        this.people = people;
         this.price = price;
         this.roomReservation = roomReservation;
+        this.count = count;
     }
 
     public Long getId() {
@@ -38,20 +80,60 @@ public class Room {
         this.id = id;
     }
 
-    public String getRoomType() {
-        return roomType;
+    public RoomType getTitle() {
+        return title;
     }
 
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
+    public void setTitle(RoomType title) {
+        this.title = title;
     }
 
-    public String getRoomView() {
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getArea() {
+        return area;
+    }
+
+    public void setArea(Integer area) {
+        this.area = area;
+    }
+
+    public RoomView getRoomView() {
         return roomView;
     }
 
-    public void setRoomView(String roomView) {
+    public void setRoomView(RoomView roomView) {
         this.roomView = roomView;
+    }
+
+    public Integer getPeople() {
+        return people;
+    }
+
+    public void setPeople(Integer people) {
+        this.people = people;
     }
 
     public Double getPrice() {
@@ -68,5 +150,13 @@ public class Room {
 
     public void setRoomReservation(List<RoomReservation> roomReservation) {
         this.roomReservation = roomReservation;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }
