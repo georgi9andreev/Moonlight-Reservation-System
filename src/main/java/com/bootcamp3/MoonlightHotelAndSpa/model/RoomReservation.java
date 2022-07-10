@@ -1,6 +1,9 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.BedType;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
@@ -11,17 +14,28 @@ public class RoomReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private Instant createdAt;
+
+    @NotNull
     private Instant checkIn;
+
+    @NotNull
     private Instant checkOut;
-    private int guests;
+
+    @NotNull
+    private Integer guests;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull
     private Double totalPrice;
-    private String bedType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private BedType facilities;
 
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id")
@@ -30,8 +44,9 @@ public class RoomReservation {
     public RoomReservation() {
     }
 
-    public RoomReservation(Long id, Instant createdAt, Instant checkIn, Instant checkOut, int guests,
-                           User user, Double totalPrice, String bedType, Room room) {
+    public RoomReservation(Long id, @NotNull Instant createdAt, @NotNull Instant checkIn,
+                           @NotNull Instant checkOut, @NotNull Integer guests, User user,
+                           @NotNull Double totalPrice, @NotNull BedType facilities, Room room) {
         this.id = id;
         this.createdAt = createdAt;
         this.checkIn = checkIn;
@@ -39,7 +54,7 @@ public class RoomReservation {
         this.guests = guests;
         this.user = user;
         this.totalPrice = totalPrice;
-        this.bedType = bedType;
+        this.facilities = facilities;
         this.room = room;
     }
 
@@ -75,11 +90,11 @@ public class RoomReservation {
         this.checkOut = checkOut;
     }
 
-    public int getGuests() {
+    public Integer getGuests() {
         return guests;
     }
 
-    public void setGuests(int guests) {
+    public void setGuests(Integer guests) {
         this.guests = guests;
     }
 
@@ -99,12 +114,12 @@ public class RoomReservation {
         this.totalPrice = totalPrice;
     }
 
-    public String getBedType() {
-        return bedType;
+    public BedType getFacilities() {
+        return facilities;
     }
 
-    public void setBedType(String bedType) {
-        this.bedType = bedType;
+    public void setFacilities(BedType facilities) {
+        this.facilities = facilities;
     }
 
     public Room getRoom() {
