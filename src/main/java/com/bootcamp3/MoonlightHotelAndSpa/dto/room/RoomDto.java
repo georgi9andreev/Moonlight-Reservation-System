@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.dto.room;
 
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 
 import java.util.ArrayList;
 
@@ -10,16 +11,18 @@ public class RoomDto {
     private String image;
     private ArrayList<String> images;
     private String description;
+    private RoomView roomView;
     private Integer area;
     private Integer people;
     private Double price;
 
-    public RoomDto(RoomType title, String image, ArrayList<String> images, String description,
+    public RoomDto(RoomType title, String image, ArrayList<String> images, String description, RoomView roomView,
                    Integer area, Integer people, Double price) {
         this.title = title;
         this.image = image;
         this.images = images;
         this.description = description;
+        this.roomView = roomView;
         this.area = area;
         this.people = people;
         this.price = price;
@@ -55,6 +58,14 @@ public class RoomDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public RoomView getRoomView() {
+        return roomView;
+    }
+
+    public void setRoomView(RoomView roomView) {
+        this.roomView = roomView;
     }
 
     public Integer getArea() {

@@ -1,15 +1,16 @@
 package com.bootcamp3.MoonlightHotelAndSpa.dto.room;
 
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 
 import java.util.ArrayList;
 
 public class RoomResponse  extends RoomDto{
 
-    private Long id;
+    private final Long id;
 
     private RoomResponse(Builder builder) {
-        super(builder.title, builder.image, builder.images, builder.description,
+        super(builder.title, builder.image, builder.images, builder.description, builder.roomView,
                 builder.area, builder.people, builder.price);
         this.id = builder.id;
     }
@@ -25,6 +26,7 @@ public class RoomResponse  extends RoomDto{
         private String image;
         private ArrayList<String> images;
         private String description;
+        private RoomView roomView;
         private Integer area;
         private Integer people;
         private Double price;
@@ -51,6 +53,11 @@ public class RoomResponse  extends RoomDto{
 
         public Builder addDescription(String description) {
             this.description = description;
+            return this;
+        }
+
+        public Builder addRoomView(RoomView roomView) {
+            this.roomView = roomView;
             return this;
         }
 
