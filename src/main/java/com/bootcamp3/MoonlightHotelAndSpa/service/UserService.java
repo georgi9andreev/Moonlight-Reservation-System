@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.PasswordResetRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 
@@ -20,5 +21,5 @@ public interface UserService {
 
     void forgotPassword(EmailRequest emailRequest);
 
-//    void resetPassword(String email);
+    void resetPassword(PasswordResetRequest request);
 }

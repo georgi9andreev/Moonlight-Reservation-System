@@ -1,46 +1,8 @@
-spring:
-  datasource:
-    url: jdbc:mysql://office.nasbg.com:33062/java_bootcamp_3?createDatabaseIfNotExist=true
-    username: java_bootcamp_3
-    password: vSzUL2Na&q{g}zW
-  mail:
-    host: mail.nasbg.com
-    port: 465
-    username: php@nasbg.com
-    password: 4g13a6q;hRPL
-    properties:
-      mail:
-        transport:
-          protocol: smtp
-        debug: true
-        smtp:
-          auth: true
-          ssl:
-            enable: true
-          starttls:
-            enable: true
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-    show-sql: true
-
-jwt:
-  secret: "Secret903242375jwfkdsf3924239wjfdsfsdf9r8423rwfsdfmsrp928490g312ewdsacxzce4332reefdsfsdf23234"
-
-
-
-#server:
-#  port: 8084
-#
 #spring:
 #  datasource:
-#    url: jdbc:mysql://localhost:3306/moonlight_hotel_db?createDatabaseIfNotExist=true
-#    username: root
-#    password: spring
+#    url: jdbc:mysql://office.nasbg.com:33062/java_bootcamp_3?createDatabaseIfNotExist=true
+#    username: java_bootcamp_3
+#    password: vSzUL2Na&q{g}zW
 #  mail:
 #    host: mail.nasbg.com
 #    port: 465
@@ -60,8 +22,46 @@ jwt:
 #
 #  jpa:
 #    hibernate:
-#      ddl-auto: create
+#      ddl-auto: update
 #    properties:
 #      hibernate:
 #        dialect: org.hibernate.dialect.MySQL8Dialect
 #    show-sql: true
+
+jwt:
+  secret: "Secret903242375jwfkdsf3924239wjfdsfsdf9r8423rwfsdfmsrp928490g312ewdsacxzce4332reefdsfsdf23234"
+
+
+
+server:
+  port: 8084
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/moonlight_hotel_db?createDatabaseIfNotExist=true
+    username: root
+    password: spring
+  mail:
+    host: mail.nasbg.com
+    port: 465
+    username: php@nasbg.com
+    password: 4g13a6q;hRPL
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        debug: true
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
