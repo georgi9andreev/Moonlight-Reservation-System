@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.configuration;
 
+import com.bootcamp3.MoonlightHotelAndSpa.exception.CustomHttp403ForbiddenEntryPoint;
 import com.bootcamp3.MoonlightHotelAndSpa.filter.CustomAccessDeniedHandler;
 import com.bootcamp3.MoonlightHotelAndSpa.filter.JwtTokenFilter;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
@@ -24,12 +25,15 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.SecurityConstant.*;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
+    private final CustomHttp403ForbiddenEntryPoint authenticationEntryPint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserServiceImpl userService;
 
     @Autowired
-    public SecurityConfiguration(CustomAccessDeniedHandler accessDeniedHandler, JwtTokenUtil jwtTokenUtil, UserServiceImpl userService) {
+    public SecurityConfiguration(CustomHttp403ForbiddenEntryPoint authenticationEntryPint, CustomAccessDeniedHandler accessDeniedHandler,
+                                 JwtTokenUtil jwtTokenUtil, UserServiceImpl userService) {
+        this.authenticationEntryPint = authenticationEntryPint;
         this.accessDeniedHandler = accessDeniedHandler;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userService = userService;
@@ -40,15 +44,16 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests(authorize -> authorize
                         .antMatchers(PUBLIC_URLS).permitAll()
-                        .antMatchers(PROTECTED_URLS).permitAll()
-                        .antMatchers(HttpMethod.POST, "/users").permitAll()
-                        .antMatchers(HttpMethod.GET, "/users").hasAnyAuthority(ADMIN)
+                        .antMatchers(PROTECTED_URLS).hasAnyAuthority(ADMIN)
+                        .antMatchers(HttpMethod.POST, "/users", "/rooms").permitAll()
+                        .antMatchers(HttpMethod.GET, "/users", "/rooms").hasAnyAuthority(ADMIN)
                         .anyRequest().denyAll())
                 .addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPint)
                 .and()
                 .csrf().disable();
 

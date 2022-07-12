@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ACCESS_DENIED;
+
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
@@ -19,6 +21,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-        response.getWriter().write("Access Denied!");
+        response.getWriter().write(ACCESS_DENIED);
     }
 }

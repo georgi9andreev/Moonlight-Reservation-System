@@ -45,6 +45,12 @@ public class ExceptionHandling {
         return createHttpResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RoomNotFoundException.class)
+    public ResponseEntity<ErrorMessage> roomNotFoundException(RoomNotFoundException ex) {
+
+        return createHttpResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
