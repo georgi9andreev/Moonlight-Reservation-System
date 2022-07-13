@@ -3,6 +3,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 import com.bootcamp3.MoonlightHotelAndSpa.configuration.PasswordEncoder;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.PasswordResetRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_FORGOT_PASSWORD;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_FORGOT_PASSWORD_SUBJECT;
@@ -73,13 +75,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void forgotPassword(EmailRequest emailRequest) {
         User user = loadUserByUsername(emailRequest.getEmail());
-        String newPassword = generateNewPassword();
+        String newPassword = generateToken();
 
         user.setPassword(PasswordEncoder.encodePassword(newPassword));
         userRepository.save(user);
 
         String message = String.format(EMAIL_FORGOT_PASSWORD,user.getFirstName(), newPassword);
         emailService.sendEmail(emailRequest.getEmail(), EMAIL_FORGOT_PASSWORD_SUBJECT, message);
+    }
+
+    @Override
+    public void resetPassword(PasswordResetRequest request) {
+
+        User user = loadUserByUsername(request.getEmail());
+
+        if (PasswordEncoder.encoder().matches(request.getToken(), user.getPassword())) {
+
+            String newPassword = PasswordEncoder.encoder().encode(request.getPassword());
+            user.setPassword(newPassword);
+
+            userRepository.save(user);
+        } else {
+
+            throw new BadCredentialsException("Token does not match");
+        }
     }
 
     private String generateNewPassword() {
@@ -94,6 +113,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
 
         return sb.toString();
+    }
+
+    private String generateToken() {
+
+        return UUID.randomUUID().toString();
     }
 
     @Override

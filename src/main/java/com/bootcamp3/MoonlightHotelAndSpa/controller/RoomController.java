@@ -1,10 +1,14 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RoomNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
+import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
+import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +25,22 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM
 public class RoomController {
 
     private final RoomService roomService;
+    private final RoomReservationService roomReservationService;
 
     @Autowired
-    public RoomController(RoomService roomService) {
+    public RoomController(RoomService roomService, RoomReservationService roomReservationService) {
         this.roomService = roomService;
+        this.roomReservationService = roomReservationService;
+    }
+
+    @PostMapping(value = "/{id}/reservations")
+    public ResponseEntity<HttpStatus> createRoomReservation(@RequestBody RoomReservationRequest request) {
+
+        RoomReservation roomReservation = RoomReservationConverter.convertToRoomReservation(request);
+
+        roomReservationService.save(roomReservation);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping
