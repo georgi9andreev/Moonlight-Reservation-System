@@ -30,7 +30,7 @@ public class RoomReservation {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotNull
+    //@NotNull
     private Double totalPrice;
 
     @NotNull

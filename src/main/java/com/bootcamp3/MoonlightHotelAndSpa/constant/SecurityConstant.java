@@ -14,7 +14,7 @@ public class SecurityConstant {
     public static final String UNABLE_TO_GET_JWT = "Unable to get JWT Token";
     public static final String ADMIN = "ROLE_ADMIN";
 
-    public static final String[] PUBLIC_URLS = {"/users/token", "/users/forgot", "/users/reset", "/v3/api-docs",
+    public static final String[] PUBLIC_URLS = {"/users/token", "/users/forgot", "/users/reset", "/rooms/{id}/reservations", "/v3/api-docs",
             "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"};
     public static final String[] PROTECTED_URLS = {"/users/*", "/rooms/*"};
 
