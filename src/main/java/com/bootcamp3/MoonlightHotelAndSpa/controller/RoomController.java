@@ -3,6 +3,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.controller;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RoomNotFoundException;
@@ -34,13 +35,15 @@ public class RoomController {
     }
 
     @PostMapping(value = "/{id}/reservations")
-    public ResponseEntity<HttpStatus> createRoomReservation(@RequestBody RoomReservationRequest request) {
+    public ResponseEntity<RoomReservationResponse> createRoomReservation(@PathVariable Long id, @RequestBody RoomReservationRequest request) {
 
-        RoomReservation roomReservation = RoomReservationConverter.convertToRoomReservation(request);
+        RoomReservation roomReservation = RoomReservationConverter.convertToRoomReservation(id, request);
 
         roomReservationService.save(roomReservation);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        RoomReservationResponse roomReservationResponse = RoomReservationConverter.convertToRoomReservationResponse(id, roomReservation, request);
+
+        return new ResponseEntity<>(roomReservationResponse, HttpStatus.OK);
     }
 
     @PostMapping
