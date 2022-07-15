@@ -2,7 +2,11 @@ package com.bootcamp3.MoonlightHotelAndSpa.converter;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.model.Image;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RoomConverter {
 
@@ -11,7 +15,7 @@ public class RoomConverter {
         Room room = new Room();
         room.setTitle(roomRequest.getTitle());
         room.setImage(roomRequest.getImage());
-        room.setImages(roomRequest.getImages());
+        room.setImages(getImagesFromRequest(roomRequest));
         room.setDescription(roomRequest.getDescription());
         room.setRoomView(roomRequest.getRoomView());
         room.setArea(roomRequest.getArea());
@@ -28,7 +32,7 @@ public class RoomConverter {
                 .addId(room.getId())
                 .addTitle(room.getTitle())
                 .addImage(room.getImage())
-                .addImages(room.getImages())
+                .addImages(getImagesFromRooms(room))
                 .addDescription(room.getDescription())
                 .addRoomView(room.getRoomView())
                 .addArea(room.getArea())
@@ -41,7 +45,7 @@ public class RoomConverter {
 
         room.setTitle(roomRequest.getTitle());
         room.setImage(roomRequest.getImage());
-        room.setImages(roomRequest.getImages());
+        room.setImages(getImagesFromRequest(roomRequest));
         room.setDescription(roomRequest.getDescription());
         room.setRoomView(roomRequest.getRoomView());
         room.setArea(roomRequest.getArea());
@@ -50,5 +54,23 @@ public class RoomConverter {
         room.setCount(roomRequest.getCount());
 
         return room;
+    }
+
+    private static Set<String> getImagesFromRooms(Room room) {
+
+        return room
+                .getImages()
+                .stream()
+                .map(Image::getUrl)
+                .collect(Collectors.toSet());
+    }
+
+    private static Set<Image> getImagesFromRequest(RoomRequest request) {
+
+        return request
+                .getImages()
+                .stream()
+                .map(image -> Image.builder().url(image).build())
+                .collect(Collectors.toSet());
     }
 }

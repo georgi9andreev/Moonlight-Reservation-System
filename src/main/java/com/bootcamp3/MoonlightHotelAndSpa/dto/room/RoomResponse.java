@@ -3,7 +3,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.dto.room;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 
-import java.util.ArrayList;
+import java.util.Set;
 
 public class RoomResponse  extends RoomDto{
 
@@ -24,7 +24,7 @@ public class RoomResponse  extends RoomDto{
         private Long id;
         private RoomType title;
         private String image;
-        private ArrayList<String> images;
+        private Set<String> images;
         private String description;
         private RoomView roomView;
         private Integer area;
@@ -46,7 +46,7 @@ public class RoomResponse  extends RoomDto{
             return this;
         }
 
-        public Builder addImages(ArrayList<String> images) {
+        public Builder addImages(Set<String> images) {
             this.images = images;
             return this;
         }
