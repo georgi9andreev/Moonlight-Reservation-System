@@ -6,7 +6,9 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.PasswordResetRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
+import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
+import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.EmailServiceImpl;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.*;
@@ -29,10 +32,13 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final EmailServiceImpl emailService;
 
+    private final RoomReservationService roomReservationService;
+
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl, EmailServiceImpl emailService) {
+    public UserController(UserServiceImpl userServiceImpl, EmailServiceImpl emailService, RoomReservationService roomReservationService) {
         this.userServiceImpl = userServiceImpl;
         this.emailService = emailService;
+        this.roomReservationService = roomReservationService;
     }
 
     @PostMapping("/forgot")
@@ -104,5 +110,12 @@ public class UserController {
         UserResponse user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+    
+    @GetMapping(value= "/{id}/reservations")
+    public ResponseEntity<List<RoomReservation>> getReservationsByUserId(@PathVariable Long id) {
+        User user = userServiceImpl.findUserById(id);
+        List<RoomReservation> reservations = roomReservationService.getByUser(user);
+        return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 }
