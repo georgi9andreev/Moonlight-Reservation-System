@@ -57,12 +57,13 @@ public class RoomReservationConverter {
         RoomResponse roomResponse = RoomConverter.convertToRoomResponse(room);
 
         Double totalPrice = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut()) * room.getPrice();
+        Integer daysPeriod = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut());
 
         RoomReservationResponse roomReservationResponse = new RoomReservationResponse();
         roomReservationResponse.setId(roomReservation.getId());
         roomReservationResponse.setStart_date(roomReservation.getCheckIn().toString());
         roomReservationResponse.setEnd_date(roomReservation.getCheckOut().toString());
-        roomReservationResponse.setDays(calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut()));
+        roomReservationResponse.setDays(daysPeriod);
         roomReservationResponse.setAdults(request.getAdults());
         roomReservationResponse.setKids(request.getKids());
         roomReservationResponse.setPrice(totalPrice);
