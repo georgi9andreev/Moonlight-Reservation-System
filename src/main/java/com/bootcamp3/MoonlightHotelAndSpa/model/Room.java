@@ -5,8 +5,8 @@ import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "rooms")
@@ -24,8 +24,9 @@ public class Room {
     @NotNull
     private String image;
 
-    @NotNull
-    private ArrayList<String> images;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "room_id")
+    private Set<Image> images;
 
     @NotNull
     private String description;
@@ -55,7 +56,7 @@ public class Room {
     public Room() {
     }
 
-    public Room(Long id, @NotNull RoomType title, @NotNull String image, @NotNull ArrayList<String> images,
+    public Room(Long id, @NotNull RoomType title, @NotNull String image, @NotNull Set<Image> images,
                 @NotNull String description, @NotNull Integer area, @NotNull RoomView roomView,
                 @NotNull Integer people, @NotNull Double price, List<RoomReservation> roomReservation,
                 Integer count) {
@@ -96,11 +97,11 @@ public class Room {
         this.image = image;
     }
 
-    public ArrayList<String> getImages() {
+    public Set<Image> getImages() {
         return images;
     }
 
-    public void setImages(ArrayList<String> images) {
+    public void setImages(Set<Image> images) {
         this.images = images;
     }
 
