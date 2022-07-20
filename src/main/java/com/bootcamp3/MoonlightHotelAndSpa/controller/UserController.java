@@ -1,12 +1,12 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
+import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.PasswordResetRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.*;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
+import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
+import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.EmailServiceImpl;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.*;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
@@ -29,10 +31,13 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
     private final EmailServiceImpl emailService;
 
+    private final RoomReservationService roomReservationService;
+
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl, EmailServiceImpl emailService) {
+    public UserController(UserServiceImpl userServiceImpl, EmailServiceImpl emailService, RoomReservationService roomReservationService) {
         this.userServiceImpl = userServiceImpl;
         this.emailService = emailService;
+        this.roomReservationService = roomReservationService;
     }
 
     @PostMapping("/forgot")
@@ -54,7 +59,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
-        User newUser =  userServiceImpl.register(userRequest);
+        User newUser = userServiceImpl.register(userRequest);
 
         UserResponse responseUser = UserConverter.convertToUserDto(newUser);
 
@@ -104,5 +109,17 @@ public class UserController {
         UserResponse user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/reservations")
+    public ResponseEntity<List<UserReservationResponse>> getReservationsByUserId(@PathVariable Long id) {
+        User user = userServiceImpl.findUserById(id);
+        List<RoomReservation> reservations = roomReservationService.getByUser(user);
+
+        List<UserReservationResponse> userReservationResponses = reservations
+                .stream()
+                .map(RoomReservationConverter::convertToUserReservationResponse).collect(Collectors.toList());
+
+        return new ResponseEntity<>(userReservationResponses, HttpStatus.OK);
     }
 }
