@@ -2,6 +2,8 @@ package com.bootcamp3.MoonlightHotelAndSpa.converter;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.UserReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
@@ -78,4 +80,33 @@ public class RoomReservationConverter {
 
         return duration.intValue();
     }
+    public static UserReservationResponse convertToUserReservationResponse(RoomReservation roomReservation) {
+
+        User user = roomReservation.getUser();
+        UserResponse userResponse = UserConverter.convertToUserDto(user);
+
+        Room room = roomReservation.getRoom();
+        RoomResponse roomResponse = RoomConverter.convertToRoomResponse(room);
+
+        int daysPeriod = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut());
+        Double totalPrice = daysPeriod * room.getPrice();
+
+        UserReservationResponse userReservationResponse = new UserReservationResponse();
+        userReservationResponse.setId(roomReservation.getId());
+        userReservationResponse.setAdults(roomReservation.getAdults());
+        userReservationResponse.setKids(roomReservation.getKids());
+        userReservationResponse.setStart_date(roomReservation.getCheckIn().toString());
+        userReservationResponse.setEnd_date(roomReservation.getCheckOut().toString());
+        userReservationResponse.setDays(daysPeriod);
+        userReservationResponse.setType_bed(roomReservation.getFacilities());
+        userReservationResponse.setView(room.getRoomView());
+        userReservationResponse.setPrice(totalPrice);
+        userReservationResponse.setDate(roomReservation.getCreatedAt().toString());
+        userReservationResponse.setStatus("paid");
+        userReservationResponse.setRoom(roomResponse);
+        userReservationResponse.setUser(userResponse);
+
+        return userReservationResponse;
+    }
+
 }

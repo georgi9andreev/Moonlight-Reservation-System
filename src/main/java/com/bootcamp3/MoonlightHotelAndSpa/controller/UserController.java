@@ -1,10 +1,8 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
+import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.PasswordResetRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.*;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -21,6 +19,7 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.*;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
@@ -60,7 +59,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
-        User newUser =  userServiceImpl.register(userRequest);
+        User newUser = userServiceImpl.register(userRequest);
 
         UserResponse responseUser = UserConverter.convertToUserDto(newUser);
 
@@ -111,11 +110,16 @@ public class UserController {
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-    
-    @GetMapping(value= "/{id}/reservations")
-    public ResponseEntity<List<RoomReservation>> getReservationsByUserId(@PathVariable Long id) {
+
+    @GetMapping(value = "/{id}/reservations")
+    public ResponseEntity<List<UserReservationResponse>> getReservationsByUserId(@PathVariable Long id) {
         User user = userServiceImpl.findUserById(id);
         List<RoomReservation> reservations = roomReservationService.getByUser(user);
-        return new ResponseEntity<>(reservations, HttpStatus.OK);
+
+        List<UserReservationResponse> userReservationResponses = reservations
+                .stream()
+                .map(RoomReservationConverter::convertToUserReservationResponse).collect(Collectors.toList());
+
+        return new ResponseEntity<>(userReservationResponses, HttpStatus.OK);
     }
 }
