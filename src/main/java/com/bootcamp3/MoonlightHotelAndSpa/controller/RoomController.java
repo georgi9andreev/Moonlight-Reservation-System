@@ -41,7 +41,7 @@ public class RoomController {
 
         roomReservationService.save(roomReservation);
 
-        RoomReservationResponse roomReservationResponse = RoomReservationConverter.convertToRoomReservationResponse(id, roomReservation, request);
+        RoomReservationResponse roomReservationResponse = RoomReservationConverter.convertToRoomReservationResponse(id, roomReservation);
 
         return new ResponseEntity<>(roomReservationResponse, HttpStatus.OK);
     }
