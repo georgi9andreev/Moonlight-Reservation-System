@@ -145,7 +145,7 @@ public class UserReservationResponse {
         this.status = status;
     }
 
-    public RoomResponse getRoom() {gi
+    public RoomResponse getRoom() {
         return room;
     }
 
