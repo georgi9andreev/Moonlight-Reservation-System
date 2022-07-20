@@ -24,7 +24,10 @@ public class RoomReservation {
     private Instant checkOut;
 
     @NotNull
-    private Integer guests;
+    private Integer adults;
+
+    @NotNull
+    private Integer kids;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -45,13 +48,14 @@ public class RoomReservation {
     }
 
     public RoomReservation(Long id, @NotNull Instant createdAt, @NotNull Instant checkIn,
-                           @NotNull Instant checkOut, @NotNull Integer guests, User user,
-                           @NotNull Double totalPrice, @NotNull BedType facilities, Room room) {
+                           @NotNull Instant checkOut, @NotNull Integer adults, @NotNull Integer kids,
+                           @NotNull User user, @NotNull Double totalPrice, @NotNull BedType facilities, Room room) {
         this.id = id;
         this.createdAt = createdAt;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
-        this.guests = guests;
+        this.adults = adults;
+        this.kids = kids;
         this.user = user;
         this.totalPrice = totalPrice;
         this.facilities = facilities;
@@ -90,12 +94,20 @@ public class RoomReservation {
         this.checkOut = checkOut;
     }
 
-    public Integer getGuests() {
-        return guests;
+    public Integer getAdults() {
+        return adults;
     }
 
-    public void setGuests(Integer guests) {
-        this.guests = guests;
+    public void setAdults(Integer adults) {
+        this.adults = adults;
+    }
+
+    public Integer getKids() {
+        return kids;
+    }
+
+    public void setKids(Integer kids) {
+        this.kids = kids;
     }
 
     public User getUser() {

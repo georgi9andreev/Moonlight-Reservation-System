@@ -43,7 +43,8 @@ public class RoomReservationConverter {
         roomReservation.setCreatedAt(Instant.now());
         roomReservation.setCheckIn(startDate);
         roomReservation.setCheckOut(endDate);
-        roomReservation.setGuests(request.getAdults() + request.getKids());
+        roomReservation.setAdults(request.getAdults());
+        roomReservation.setKids(request.getKids());
         roomReservation.setUser(user);
         roomReservation.setFacilities(request.getType_bed());
         roomReservation.setTotalPrice(totalPrice);
@@ -52,22 +53,21 @@ public class RoomReservationConverter {
         return roomReservation;
     }
 
-    public static RoomReservationResponse convertToRoomReservationResponse(Long id, RoomReservation roomReservation,
-                                                                           RoomReservationRequest request) {
+    public static RoomReservationResponse convertToRoomReservationResponse(Long id, RoomReservation roomReservation) {
 
         Room room = roomService.findRoomById(id);
         RoomResponse roomResponse = RoomConverter.convertToRoomResponse(room);
 
         Double totalPrice = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut()) * room.getPrice();
-        Integer daysPeriod = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut());
+        int daysPeriod = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut());
 
         RoomReservationResponse roomReservationResponse = new RoomReservationResponse();
         roomReservationResponse.setId(roomReservation.getId());
         roomReservationResponse.setStart_date(roomReservation.getCheckIn().toString());
         roomReservationResponse.setEnd_date(roomReservation.getCheckOut().toString());
         roomReservationResponse.setDays(daysPeriod);
-        roomReservationResponse.setAdults(request.getAdults());
-        roomReservationResponse.setKids(request.getKids());
+        roomReservationResponse.setAdults(roomReservation.getAdults());
+        roomReservationResponse.setKids(roomReservation.getKids());
         roomReservationResponse.setPrice(totalPrice);
         roomReservationResponse.setRoom(roomResponse);
 
