@@ -122,4 +122,15 @@ public class UserController {
 
         return new ResponseEntity<>(userReservationResponses, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/reservations")
+    public ResponseEntity<List<UserReservationResponse>> getReservations() {
+        List<RoomReservation> reservations = roomReservationService.getAll();
+
+        List<UserReservationResponse> reservationResponses = reservations
+                .stream()
+                .map(RoomReservationConverter::convertToUserReservationResponse).collect(Collectors.toList());
+
+        return new ResponseEntity<>(reservationResponses, HttpStatus.OK);
+    }
 }

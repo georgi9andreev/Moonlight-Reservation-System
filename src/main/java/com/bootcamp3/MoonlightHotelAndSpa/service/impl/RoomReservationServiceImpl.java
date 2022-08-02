@@ -33,5 +33,9 @@ public class RoomReservationServiceImpl implements RoomReservationService {
         return roomReservationRepository.findAll(Example.of(roomReservation));
     }
 
+    @Override
+    public List<RoomReservation> getAll() {
+        return roomReservationRepository.findAll();
+    }
 
 }
