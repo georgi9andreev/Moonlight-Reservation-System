@@ -10,4 +10,6 @@ public interface RoomReservationService {
     void save(RoomReservation roomReservation);
 
     List<RoomReservation> getByUser(User user);
+
+    List<RoomReservation> getAll();
 }
