@@ -16,7 +16,7 @@ public class RoomValidator {
     }
 
     public void validateRoomByType(String roomType) {
-        roomRepository.findByType(roomType)
+        roomRepository.findByTitle(roomType)
                 .orElseThrow(() -> new RecordNotFoudException(String.format("Room with type: %s, not found", roomType)));
     }
 

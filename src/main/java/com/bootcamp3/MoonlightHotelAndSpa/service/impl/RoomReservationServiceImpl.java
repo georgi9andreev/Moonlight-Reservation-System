@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
+import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.RoomReservationRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -36,6 +38,11 @@ public class RoomReservationServiceImpl implements RoomReservationService {
     @Override
     public List<RoomReservation> getAll() {
         return roomReservationRepository.findAll();
+    }
+
+    @Override
+    public List<Room> findRoomByPeriodAndPeople(Instant startDate, Instant endDate, int adults, int kids) {
+        return roomReservationRepository.findRoomByPeriodAndPeople(startDate, endDate, (adults + kids));
     }
 
 }
