@@ -16,4 +16,8 @@ public interface RoomReservationService {
     List<RoomReservation> getAll();
 
     List<Room> findRoomByPeriodAndPeople(Instant startDate, Instant endDate, int adults, int kids);
+
+    RoomReservation findReservationByIdAndUserId(Long uid, Long rid);
+
+    RoomReservation findById(Long id);
 }
