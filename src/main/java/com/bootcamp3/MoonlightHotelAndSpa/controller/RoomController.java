@@ -94,6 +94,7 @@ public class RoomController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping
     public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestBody AvailableRoomRequest request) {
 
@@ -103,5 +104,19 @@ public class RoomController {
         List<RoomResponse> rooms = room.stream().map(RoomConverter::convertToRoomResponse).collect(Collectors.toList());
 
         return new ResponseEntity<>(rooms, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    @DeleteMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<HttpStatus> deleteReservationByIdAndRoomId(@PathVariable Long id, @PathVariable Long rid) {
+
+        try {
+            roomReservationService.deleteByRoomIdAndReservationId(id, rid);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+
+            throw new RuntimeException("Reservation can not be deleted");
+        }
     }
 }

@@ -20,4 +20,6 @@ public interface RoomReservationService {
     RoomReservation findReservationByIdAndUserId(Long uid, Long rid);
 
     RoomReservation findById(Long id);
+
+    void deleteByRoomIdAndReservationId(Long id, Long rid);
 }
