@@ -133,4 +133,14 @@ public class UserController {
 
         return new ResponseEntity<>(reservationResponses, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/{id}/reservations/{rid}")
+    private ResponseEntity<UserReservationResponse> getReservationByIdAndUserId(@PathVariable Long uid, @PathVariable Long rid) {
+
+        RoomReservation roomReservation = roomReservationService.findReservationByIdAndUserId(uid, rid);
+
+        UserReservationResponse userReservationResponse = RoomReservationConverter.convertToUserReservationResponse(roomReservation);
+
+        return new ResponseEntity<>(userReservationResponse, HttpStatus.OK);
+    }
 }

@@ -4,6 +4,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.room.AvailableRoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RoomNotFoundException;
@@ -17,7 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM_NOT_FOUND;
 
@@ -68,13 +70,6 @@ public class RoomController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @GetMapping
-    public ResponseEntity<Set<RoomResponse>> findAll() {
-
-         return new ResponseEntity<>(roomService.getAllRooms(), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
 
@@ -96,6 +91,32 @@ public class RoomController {
         } catch (Exception e) {
 
             throw new RoomNotFoundException(String.format(ROOM_NOT_FOUND, id));
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    @GetMapping
+    public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestBody AvailableRoomRequest request) {
+
+        List<Room> room = roomReservationService.findRoomByPeriodAndPeople(request.getStartDate(), request.getEndDate(),
+                request.getAdults(), request.getKids());
+
+        List<RoomResponse> rooms = room.stream().map(RoomConverter::convertToRoomResponse).collect(Collectors.toList());
+
+        return new ResponseEntity<>(rooms, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    @DeleteMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<HttpStatus> deleteReservationByIdAndRoomId(@PathVariable Long id, @PathVariable Long rid) {
+
+        try {
+            roomReservationService.deleteByRoomIdAndReservationId(id, rid);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+
+            throw new RuntimeException("Reservation can not be deleted");
         }
     }
 }
