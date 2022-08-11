@@ -7,6 +7,15 @@ import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 
 public class TableConverter {
 
+    public static Table update(Table table, TableRequest request) {
+
+        table.setZone(request.getZone());
+        table.setNumber(request.getNumber());
+        table.setPeople(request.getPeople());
+
+        return table;
+    }
+
     public static TableResponse convertToTableResponse(Table table) {
 
         return new TableResponse.Builder()

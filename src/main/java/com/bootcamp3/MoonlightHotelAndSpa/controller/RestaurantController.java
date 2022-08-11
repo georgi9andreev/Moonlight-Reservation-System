@@ -59,4 +59,14 @@ public class RestaurantController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<TableResponse> updateTable(@PathVariable Long id, @RequestBody TableRequest request) {
+
+        tableService.update(id, request);
+
+        TableResponse response = TableConverter.convertToTableResponse(tableService.findById(id));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
