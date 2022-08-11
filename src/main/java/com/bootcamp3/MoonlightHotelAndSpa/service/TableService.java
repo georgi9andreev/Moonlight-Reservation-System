@@ -6,6 +6,8 @@ public interface TableService {
 
     void save(Table table);
 
+    Table findById(Long id);
+
 //    void update(Table table);
 //
 //    List<Table> findAllTables();

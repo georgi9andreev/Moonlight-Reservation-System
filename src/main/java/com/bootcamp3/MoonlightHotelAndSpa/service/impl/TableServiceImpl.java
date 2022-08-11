@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
+import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.TableRepository;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableService;
@@ -20,5 +21,11 @@ public class TableServiceImpl implements TableService {
     public void save(Table table) {
 
         tableRepository.save(table);
+    }
+
+    @Override
+    public Table findById(Long id) {
+        return tableRepository.findById(id)
+                .orElseThrow(() ->new RecordNotFoudException(String.format("Table with id: %d, not found", id)));
     }
 }

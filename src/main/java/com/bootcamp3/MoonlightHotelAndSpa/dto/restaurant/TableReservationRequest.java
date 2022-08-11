@@ -3,13 +3,9 @@ package com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant;
 public class TableReservationRequest {
 
     private int table;
-
     private String date;
-
     private String hour;
-
     private int people;
-
     private double price;
 
     public TableReservationRequest() {
