@@ -47,7 +47,7 @@ public class RestaurantController {
     }
 
     //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
-    @GetMapping(value = "/{id}/reservations")
+    @PostMapping(value = "/{id}/reservations")
     public ResponseEntity<TableReservationResponse> createTableReservation(@PathVariable Long id, @RequestBody TableReservationRequest request, @AuthenticationPrincipal User user) {
 
         User foundUser = userService.findUserById(user.getId());
