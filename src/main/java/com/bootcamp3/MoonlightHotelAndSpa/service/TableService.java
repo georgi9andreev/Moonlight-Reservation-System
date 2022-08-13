@@ -11,5 +11,7 @@ public interface TableService {
 
     void update(Long id, TableRequest request);
 
+    void deleteTable(Long id);
+
 //    List<Table> findAllTables();
 }

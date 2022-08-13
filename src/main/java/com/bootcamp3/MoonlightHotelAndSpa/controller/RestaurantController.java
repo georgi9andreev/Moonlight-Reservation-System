@@ -6,6 +6,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
@@ -31,6 +32,19 @@ public class RestaurantController {
         this.tableService = tableService;
         this.tableReservationService = tableReservationService;
         this.userService = userService;
+    }
+
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<HttpStatus> deleteTableById(@PathVariable Long id) {
+
+        try {
+            tableService.deleteTable(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+
+            throw new RecordNotFoudException(String.format("Table with id: %s, not found", id));
+        }
     }
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")

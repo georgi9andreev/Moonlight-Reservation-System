@@ -38,4 +38,9 @@ public class TableServiceImpl implements TableService {
 
         save(TableConverter.update(table, request));
     }
+
+    @Override
+    public void deleteTable(Long id) {
+        tableRepository.deleteById(id);
+    }
 }
