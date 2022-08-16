@@ -2,10 +2,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationResponse;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.*;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -36,6 +33,16 @@ public class RestaurantController {
         this.tableService = tableService;
         this.tableReservationService = tableReservationService;
         this.userService = userService;
+    }
+
+    @PutMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<TableReservationResponse> updateTableReservations(@PathVariable Long id, @PathVariable Long rid, @RequestBody TableReservationUpdateRequest request) {
+
+        tableReservationService.updateTableReservation(id, rid, request);
+
+        TableReservationResponse response = TableReservationConverter.convertToTableReservationResponse(tableReservationService.findTableReservationById(rid));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/reservations")

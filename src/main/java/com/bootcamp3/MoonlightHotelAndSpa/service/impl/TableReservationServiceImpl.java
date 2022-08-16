@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationUpdateRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
@@ -47,8 +48,7 @@ public class TableReservationServiceImpl implements TableReservationService {
     public TableReservation getReservationByIdAndTableId(Long id, Long rid) {
 
         Table table = tableService.findById(id);
-        TableReservation tableReservation = tableReservationRepository.findById(rid)
-                .orElseThrow(() -> new RecordNotFoudException(String.format("Table reservation with id: %s, not found", rid)));
+        TableReservation tableReservation = findTableReservationById(rid);
 
         if (!id.equals(tableReservation.getTable().getId())) {
             throw new RuntimeException("Table id does not match");
@@ -62,5 +62,30 @@ public class TableReservationServiceImpl implements TableReservationService {
 
         Table foundTable = tableService.findById(id);
         return tableReservationRepository.findByTable(foundTable);
+    }
+
+    @Override
+    public void updateTableReservation(Long id, Long rid, TableReservationUpdateRequest request) {
+
+        //TO DO LATER
+        // 1.Validator for table
+        // 2.Validator for table reservation
+        // 3.Validator for user
+        // 4.Validator for table change
+        //  4.1.Validate new table number(is table exist)
+
+        Table foundTable = tableService.findById(id);
+        TableReservation foundTableReservation = findTableReservationById(rid);
+
+        TableReservation updatedTableReservation = TableReservationConverter.update(foundTableReservation, request);
+
+        save(updatedTableReservation);
+    }
+
+    @Override
+    public TableReservation findTableReservationById(Long id) {
+
+        return tableReservationRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoudException(String.format("Table reservation with id: %s, not found", id)));
     }
 }

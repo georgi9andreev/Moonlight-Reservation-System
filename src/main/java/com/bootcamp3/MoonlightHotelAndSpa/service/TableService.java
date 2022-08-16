@@ -13,5 +13,5 @@ public interface TableService {
 
     void deleteTable(Long id);
 
-//    List<Table> findAllTables();
+    Table findByTableNumber(int number);
 }

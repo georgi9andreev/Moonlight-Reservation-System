@@ -3,11 +3,13 @@ package com.bootcamp3.MoonlightHotelAndSpa.converter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationUpdateRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableService;
+import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +22,27 @@ import java.time.format.DateTimeFormatter;
 public class TableReservationConverter {
 
     private static TableService tableService;
+    private static UserService userService;
 
     @Autowired
-    public TableReservationConverter(TableService tableService) {
+    public TableReservationConverter(TableService tableService, UserService userService) {
 
         TableReservationConverter.tableService = tableService;
+        TableReservationConverter.userService = userService;
+    }
+
+    public static TableReservation update(TableReservation tableReservation, TableReservationUpdateRequest request) {
+
+        User user = userService.findUserById(request.getUser());
+        Table table = tableService.findByTableNumber(request.getTable());
+
+        tableReservation.setUser(user);
+        tableReservation.setDate(convertRequestDateAndHourToInstant(request.getDate(), request.getHour()));
+        tableReservation.setTable(table);
+        tableReservation.setPeople(request.getPeople());
+        tableReservation.setPrice(request.getPrice());
+
+        return tableReservation;
     }
 
     public static TableReservation convertToTableReservation(Long id, TableReservationRequest request, User user) {
