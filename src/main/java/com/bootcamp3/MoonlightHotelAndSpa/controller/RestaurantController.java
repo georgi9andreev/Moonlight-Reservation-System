@@ -6,6 +6,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
@@ -18,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/tables")
@@ -32,6 +36,19 @@ public class RestaurantController {
         this.tableService = tableService;
         this.tableReservationService = tableReservationService;
         this.userService = userService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TableResponse>> getAllAvailableTable(@RequestParam int people,
+                                                                    @RequestParam TableZone zone,
+                                                                    @RequestParam String date,
+                                                                    @RequestParam String hour) {
+
+        List<Table> tables = tableReservationService.getAllAvailableTables(people, zone, date, hour);
+
+        List<TableResponse> tableResponses = tables.stream().map(TableConverter::convertToTableResponse).collect(Collectors.toList());
+
+        return new ResponseEntity<>(tableResponses, HttpStatus.OK);
     }
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")

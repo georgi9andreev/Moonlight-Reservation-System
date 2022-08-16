@@ -58,7 +58,7 @@ public class TableReservationConverter {
                 .build();
     }
 
-    private static Instant convertRequestDateAndHourToInstant(String date, String hour) {
+    public static Instant convertRequestDateAndHourToInstant(String date, String hour) {
 
         String concatenatedDate = date + " " + hour;
 
