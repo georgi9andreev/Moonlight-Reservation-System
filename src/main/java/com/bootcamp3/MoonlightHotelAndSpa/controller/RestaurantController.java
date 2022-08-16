@@ -38,6 +38,16 @@ public class RestaurantController {
         this.userService = userService;
     }
 
+    @GetMapping(value = "/{id}/reservations")
+    public ResponseEntity<List<TableReservationResponse>> getAllReservationsByTable(@PathVariable Long id) {
+
+        List<TableReservation> tableReservations = tableReservationService.getAllReservationsByTable(id);
+
+        List<TableReservationResponse> response = tableReservations.stream().map(TableReservationConverter::convertToTableReservationResponse).collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{id}/reservations/{rid}")
     public ResponseEntity<TableReservationResponse> getTableReservationByIdAndTableId(@PathVariable Long id, @PathVariable Long rid) {
 

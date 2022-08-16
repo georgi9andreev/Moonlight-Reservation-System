@@ -21,5 +21,7 @@ public interface TableReservationRepository extends JpaRepository<TableReservati
                                       @Param("zone") TableZone tableZone,
                                       @Param("start") Instant start,
                                       @Param("end") Instant end);
+
+    List<TableReservation> findByTable(Table table);
 }
 

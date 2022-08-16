@@ -56,4 +56,11 @@ public class TableReservationServiceImpl implements TableReservationService {
 
         return tableReservation;
     }
+
+    @Override
+    public List<TableReservation> getAllReservationsByTable(Long id) {
+
+        Table foundTable = tableService.findById(id);
+        return tableReservationRepository.findByTable(foundTable);
+    }
 }

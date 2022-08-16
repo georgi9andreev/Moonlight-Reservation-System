@@ -13,4 +13,6 @@ public interface TableReservationService {
     List<Table> getAllAvailableTables(int people, TableZone zone, String date, String hour);
 
     TableReservation getReservationByIdAndTableId(Long id, Long rid);
+
+    List<TableReservation> getAllReservationsByTable(Long id);
 }
