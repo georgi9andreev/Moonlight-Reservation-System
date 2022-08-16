@@ -38,6 +38,15 @@ public class RestaurantController {
         this.userService = userService;
     }
 
+    @GetMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<TableReservationResponse> getTableReservationByIdAndTableId(@PathVariable Long id, @PathVariable Long rid) {
+
+        TableReservation tableReservation = tableReservationService.getReservationByIdAndTableId(id, rid);
+        TableReservationResponse response = TableReservationConverter.convertToTableReservationResponse(tableReservation);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<TableResponse>> getAllAvailableTable(@RequestParam int people,
                                                                     @RequestParam TableZone zone,
