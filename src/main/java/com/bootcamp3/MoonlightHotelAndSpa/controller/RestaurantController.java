@@ -107,6 +107,9 @@ public class RestaurantController {
     @PostMapping(value = "/{id}/reservations")
     public ResponseEntity<TableReservationResponse> createTableReservation(@PathVariable Long id, @RequestBody TableReservationRequest request, @AuthenticationPrincipal User user) {
 
+        //TO DO
+        // 1.Validator to check is Table not reserved
+
         User foundUser = userService.findUserById(user.getId());
 
         TableReservation tableReservation = TableReservationConverter.convertToTableReservation(id, request, foundUser);
