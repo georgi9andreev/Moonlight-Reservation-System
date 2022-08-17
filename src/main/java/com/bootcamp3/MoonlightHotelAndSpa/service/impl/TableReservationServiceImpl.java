@@ -88,4 +88,18 @@ public class TableReservationServiceImpl implements TableReservationService {
         return tableReservationRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoudException(String.format("Table reservation with id: %s, not found", id)));
     }
+
+    @Override
+    public void deleteTableReservation(Long id, Long rid) {
+
+        Table foundTable = tableService.findById(id);
+        TableReservation foundTableReservation = findTableReservationById(rid);
+
+        if (!id.equals(foundTableReservation.getTable().getId())) {
+
+            throw new RuntimeException("Table id does not match");
+        }
+
+        tableReservationRepository.deleteById(rid);
+    }
 }

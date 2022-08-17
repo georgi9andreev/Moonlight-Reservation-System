@@ -20,4 +20,6 @@ public interface TableReservationService {
     void updateTableReservation(Long id, Long rid, TableReservationUpdateRequest request);
 
     TableReservation findTableReservationById(Long id);
+
+    void deleteTableReservation(Long id, Long rid);
 }

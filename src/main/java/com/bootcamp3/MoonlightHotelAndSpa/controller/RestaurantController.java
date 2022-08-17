@@ -126,4 +126,16 @@ public class RestaurantController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<HttpStatus> deleteTableReservation(@PathVariable Long id, @PathVariable Long rid) {
+
+        try {
+            tableReservationService.deleteTableReservation(id, rid);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception ex) {
+
+            throw new RecordNotFoudException(String.format("Table reservation with id: %d, not found", rid));
+        }
+    }
 }
