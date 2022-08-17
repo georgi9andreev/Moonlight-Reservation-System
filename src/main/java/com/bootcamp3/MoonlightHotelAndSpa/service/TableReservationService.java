@@ -1,7 +1,9 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service;
 
+import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationUpdateRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
+import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 
@@ -24,4 +26,6 @@ public interface TableReservationService {
     void deleteTableReservation(Long id, Long rid);
 
     List<TableReservation> getTableReservationsByUser(Long id);
+
+    TableReservation summarizeTableReservation(Long id, TableReservationRequest request, User user);
 }

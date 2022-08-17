@@ -141,4 +141,15 @@ public class RestaurantController {
             throw new RecordNotFoudException(String.format("Table reservation with id: %d, not found", rid));
         }
     }
+
+    @PostMapping(value = "/{id}/summarize")
+    public ResponseEntity<TableReservationResponse> summarizeTableReservation(@PathVariable Long id,
+                                                                              @RequestBody TableReservationRequest request,
+                                                                              @AuthenticationPrincipal User user) {
+
+        TableReservation tableReservation = tableReservationService.summarizeTableReservation(id, request, user);
+        TableReservationResponse tableReservationResponse = TableReservationConverter.convertToTableReservationResponse(tableReservation);
+
+        return new ResponseEntity<>(tableReservationResponse, HttpStatus.OK);
+    }
 }
