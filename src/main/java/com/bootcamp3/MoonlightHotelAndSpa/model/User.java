@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import com.bootcamp3.MoonlightHotelAndSpa.exception.InvalidPhoneNumber;
+import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,11 +56,14 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<RoomReservation> reservations;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TableReservation> tableReservations;
+
     public User() {
     }
 
     public User(Long id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles,
-                Instant createdAt, List<RoomReservation> reservations) {
+                Instant createdAt, List<RoomReservation> reservations, List<TableReservation> tableReservations) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -69,6 +73,7 @@ public class User implements UserDetails {
         this.roles = roles;
         this.createdAt = createdAt;
         this.reservations = reservations;
+        this.tableReservations = tableReservations;
     }
 
     public Long getId() {
@@ -142,6 +147,14 @@ public class User implements UserDetails {
 
     public void setReservations(List<RoomReservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<TableReservation> getTableReservations() {
+        return tableReservations;
+    }
+
+    public void setTableReservations(List<TableReservation> tableReservations) {
+        this.tableReservations = tableReservations;
     }
 
     @Override
