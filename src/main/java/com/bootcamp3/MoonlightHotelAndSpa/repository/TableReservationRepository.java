@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.repository;
 
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
+import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,5 +24,6 @@ public interface TableReservationRepository extends JpaRepository<TableReservati
                                       @Param("end") Instant end);
 
     List<TableReservation> findByTable(Table table);
+    List<TableReservation> findByUser(User user);
 }
 

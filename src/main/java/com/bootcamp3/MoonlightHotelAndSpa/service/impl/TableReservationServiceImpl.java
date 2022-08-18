@@ -1,14 +1,17 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationUpdateRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
+import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.TableReservationRepository;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableService;
+import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +23,13 @@ public class TableReservationServiceImpl implements TableReservationService {
 
     private final TableReservationRepository tableReservationRepository;
     private final TableService tableService;
+    private final UserService userService;
 
     @Autowired
-    public TableReservationServiceImpl(TableReservationRepository tableReservationRepository, TableService tableService) {
+    public TableReservationServiceImpl(TableReservationRepository tableReservationRepository, TableService tableService, UserService userService) {
         this.tableReservationRepository = tableReservationRepository;
         this.tableService = tableService;
+        this.userService = userService;
     }
 
     @Override
@@ -87,5 +92,35 @@ public class TableReservationServiceImpl implements TableReservationService {
 
         return tableReservationRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoudException(String.format("Table reservation with id: %s, not found", id)));
+    }
+
+    @Override
+    public void deleteTableReservation(Long id, Long rid) {
+
+        Table foundTable = tableService.findById(id);
+        TableReservation foundTableReservation = findTableReservationById(rid);
+
+        if (!id.equals(foundTableReservation.getTable().getId())) {
+
+            throw new RuntimeException("Table id does not match");
+        }
+
+        tableReservationRepository.deleteById(rid);
+    }
+
+    @Override
+    public List<TableReservation> getTableReservationsByUser(Long id) {
+
+        User foundUser = userService.findUserById(id);
+        return tableReservationRepository.findByUser(foundUser);
+
+
+    }
+
+    @Override
+    public TableReservation summarizeTableReservation(Long id, TableReservationRequest request, User user) {
+
+        Table foundTable = tableService.findById(id);
+        return TableReservationConverter.convertToTableReservation(id, request, user);
     }
 }

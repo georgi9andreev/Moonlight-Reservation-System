@@ -107,6 +107,9 @@ public class RestaurantController {
     @PostMapping(value = "/{id}/reservations")
     public ResponseEntity<TableReservationResponse> createTableReservation(@PathVariable Long id, @RequestBody TableReservationRequest request, @AuthenticationPrincipal User user) {
 
+        //TO DO
+        // 1.Validator to check is Table not reserved
+
         User foundUser = userService.findUserById(user.getId());
 
         TableReservation tableReservation = TableReservationConverter.convertToTableReservation(id, request, foundUser);
@@ -125,5 +128,28 @@ public class RestaurantController {
         TableResponse response = TableConverter.convertToTableResponse(tableService.findById(id));
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<HttpStatus> deleteTableReservation(@PathVariable Long id, @PathVariable Long rid) {
+
+        try {
+            tableReservationService.deleteTableReservation(id, rid);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception ex) {
+
+            throw new RecordNotFoudException(String.format("Table reservation with id: %d, not found", rid));
+        }
+    }
+
+    @PostMapping(value = "/{id}/summarize")
+    public ResponseEntity<TableReservationResponse> summarizeTableReservation(@PathVariable Long id,
+                                                                              @RequestBody TableReservationRequest request,
+                                                                              @AuthenticationPrincipal User user) {
+
+        TableReservation tableReservation = tableReservationService.summarizeTableReservation(id, request, user);
+        TableReservationResponse tableReservationResponse = TableReservationConverter.convertToTableReservationResponse(tableReservation);
+
+        return new ResponseEntity<>(tableReservationResponse, HttpStatus.OK);
     }
 }
