@@ -12,6 +12,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM
 
 @RestController
 @RequestMapping(value = "/rooms")
+@Tag(name = "Rooms")
 public class RoomController {
 
     private final RoomService roomService;

@@ -1,6 +1,6 @@
-package com.bootcamp3.MoonlightHotelAndSpa.model;
+package com.bootcamp3.MoonlightHotelAndSpa.model.errormessage;
 
-public class ErrorResponse extends ErrorMessage{
+public class ErrorResponse extends ErrorMessage {
 
     private ErrorField errors;
 

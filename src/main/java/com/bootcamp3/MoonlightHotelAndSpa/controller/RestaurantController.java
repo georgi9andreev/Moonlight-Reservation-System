@@ -11,6 +11,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/tables")
+@Tag(name = "Restaurant")
 public class RestaurantController {
 
     private final TableService tableService;

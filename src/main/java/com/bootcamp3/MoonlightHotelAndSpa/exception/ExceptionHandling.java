@@ -1,8 +1,8 @@
 package com.bootcamp3.MoonlightHotelAndSpa.exception;
 
-import com.bootcamp3.MoonlightHotelAndSpa.model.ErrorField;
-import com.bootcamp3.MoonlightHotelAndSpa.model.ErrorMessage;
-import com.bootcamp3.MoonlightHotelAndSpa.model.ErrorResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.model.errormessage.ErrorField;
+import com.bootcamp3.MoonlightHotelAndSpa.model.errormessage.ErrorMessage;
+import com.bootcamp3.MoonlightHotelAndSpa.model.errormessage.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;

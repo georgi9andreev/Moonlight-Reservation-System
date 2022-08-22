@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
+import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.user.*;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
@@ -13,10 +14,10 @@ import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.EmailServiceImpl;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,11 +26,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.*;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_SUBJECT;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_TEXT;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/users", produces = "application/json")
+@Tag(name = "Users")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
@@ -46,14 +49,18 @@ public class UserController {
     }
 
     @PostMapping("/forgot")
+    @UserPasswordApiDocs(summary = "Send request to email for resetting user password")
     public ResponseEntity<HttpStatus> forgotPassword(@RequestBody EmailRequest emailRequest) {
 
         userServiceImpl.forgotPassword(emailRequest);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        //TO DO - Send email with link inside in format {domain-name}/reset/:token/:email
     }
 
     @PostMapping("/reset")
+    @UserPasswordApiDocs(summary = "Reset password")
     public ResponseEntity<HttpStatus> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest) {
 
         userServiceImpl.resetPassword(passwordResetRequest);
@@ -62,8 +69,8 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserResponse> register(@Valid @RequestBody UserRequest userRequest) {
+    @RegisterUserApiDocs
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRequest userRequest) {
         User newUser = userServiceImpl.register(userRequest);
 
         UserResponse responseUser = UserConverter.convertToUserDto(newUser);
@@ -74,9 +81,10 @@ public class UserController {
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    @DeleteUserApiDocs
+    public ResponseEntity<String> deleteUserById(@PathVariable Long id) {
 
         try {
             userServiceImpl.deleteUserById(id);
@@ -88,17 +96,20 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
+    @FindUserByIdApiDocs
+    public ResponseEntity<UserResponse> findUserById(@PathVariable Long id) {
 
         UserResponse user = UserConverter.convertToUserDto(userServiceImpl.findUserById(id));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping
-    public ResponseEntity<Set<UserResponse>> findAll() {
+    @FindListOfAllUsersApiDocs
+    public ResponseEntity<Set<UserResponse>> getListOfAllUsers() {
         Set<UserResponse> userResponses = new HashSet<>();
 
         for (User user : userServiceImpl.getUsers()) {
@@ -108,15 +119,19 @@ public class UserController {
         return ResponseEntity.ok(userResponses);
     }
 
-    @PostMapping(value = "/{id}")
-    public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    @PutMapping(value = "/{id}")
+    @UserUpdateApiDocs
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
 
         UserResponse user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping(value = "/{id}/reservations")
+    @FindReservationsByUserIdApiDocs
     public ResponseEntity<List<UserReservationResponse>> getReservationsByUserId(@PathVariable Long id) {
         User user = userServiceImpl.findUserById(id);
         List<RoomReservation> reservations = roomReservationService.getByUser(user);
@@ -128,7 +143,9 @@ public class UserController {
         return new ResponseEntity<>(userReservationResponses, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping(value = "/reservations")
+    @FindReservationsApiDocs
     public ResponseEntity<List<UserReservationResponse>> getReservations() {
         List<RoomReservation> reservations = roomReservationService.getAll();
 
@@ -139,7 +156,9 @@ public class UserController {
         return new ResponseEntity<>(reservationResponses, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping(value = "/{id}/reservations/{rid}")
+    @FindReservationsByUserIdApiDocs
     public ResponseEntity<UserReservationResponse> getReservationByIdAndUserId(@PathVariable Long uid, @PathVariable Long rid) {
 
         RoomReservation roomReservation = roomReservationService.findReservationByIdAndUserId(uid, rid);
@@ -149,7 +168,9 @@ public class UserController {
         return new ResponseEntity<>(userReservationResponse, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping(value = "/{id}/tables/reservations")
+    @FindTableReservationsByUserApiDocs
     public ResponseEntity<List<TableReservationResponse>> getTableReservationsByUser(@PathVariable Long id) {
 
         List<TableReservation> tableReservations = tableReservationService.getTableReservationsByUser(id);
