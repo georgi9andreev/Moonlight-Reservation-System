@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
+import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.room.*;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
@@ -16,7 +17,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM_NOT_FOUND;
 
 @RestController
-@RequestMapping(value = "/rooms")
+@RequestMapping(value = "/rooms", produces = "application/json")
 @Tag(name = "Rooms")
 public class RoomController {
 
@@ -38,7 +38,9 @@ public class RoomController {
         this.roomReservationService = roomReservationService;
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @PostMapping(value = "/{id}/reservations")
+    @CreateRoomReservationApiDocs
     public ResponseEntity<RoomReservationResponse> createRoomReservation(@PathVariable Long id, @RequestBody RoomReservationRequest request) {
 
         RoomReservation roomReservation = RoomReservationConverter.convertToRoomReservation(id, request);
@@ -50,7 +52,9 @@ public class RoomController {
         return new ResponseEntity<>(roomReservationResponse, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping
+    @CreateNewRoomApiDocs
     public ResponseEntity<RoomResponse> createRoom(@RequestBody RoomRequest request) {
 
         Room room = RoomConverter.convertToRoom(request);
@@ -62,17 +66,19 @@ public class RoomController {
         return new ResponseEntity<>(roomResponse, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RoomResponse> findById(@PathVariable Long id) {
+    @FindRoomByIdApiDocs
+    public ResponseEntity<RoomResponse> findRoomById(@PathVariable Long id) {
 
         RoomResponse room = RoomConverter.convertToRoomResponse(roomService.findRoomById(id));
 
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
+    @UpdateRoomApiDocs
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
 
         Room room = roomService.updateRoom(id, request);
@@ -82,8 +88,9 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
+    @DeleteRoomByIdApiDocs
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
         try {
@@ -96,8 +103,9 @@ public class RoomController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping
+    @GetAvailableRooms
     public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestBody AvailableRoomRequest request) {
 
         List<Room> room = roomReservationService.findRoomByPeriodAndPeople(request.getStartDate(), request.getEndDate(),
@@ -108,8 +116,9 @@ public class RoomController {
         return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @DeleteMapping(value = "/{id}/reservations/{rid}")
+    @DeleteReservationByIdAndRoomIdApiDocs
     public ResponseEntity<HttpStatus> deleteReservationByIdAndRoomId(@PathVariable Long id, @PathVariable Long rid) {
 
         try {
