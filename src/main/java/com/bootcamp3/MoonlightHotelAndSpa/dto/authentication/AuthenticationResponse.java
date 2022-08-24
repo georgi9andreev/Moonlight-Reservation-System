@@ -1,6 +1,6 @@
-package com.bootcamp3.MoonlightHotelAndSpa.model;
+package com.bootcamp3.MoonlightHotelAndSpa.dto.authentication;
 
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 
 public class AuthenticationResponse {
 

@@ -1,6 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.converter;
 
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationUpdateRequest;
@@ -63,7 +63,7 @@ public class TableReservationConverter {
     public static TableReservationResponse convertToTableReservationResponse(TableReservation tableReservation) {
 
         TableResponse tableResponse = TableConverter.convertToTableResponse(tableReservation.getTable());
-        UserResponse userResponse = UserConverter.convertToUserDto(tableReservation.getUser());
+        UserResponse userResponse = UserConverter.convertToUserResponse(tableReservation.getUser());
 
         return new TableReservationResponse.Builder()
                 .addId(tableReservation.getId())

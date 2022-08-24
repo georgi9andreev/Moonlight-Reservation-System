@@ -1,7 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.user;
 
 import com.bootcamp3.MoonlightHotelAndSpa.annotation.util.CustomResponseCode;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.model.errormessage.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

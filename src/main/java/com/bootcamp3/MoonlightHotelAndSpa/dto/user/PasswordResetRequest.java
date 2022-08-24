@@ -1,4 +1,4 @@
-package com.bootcamp3.MoonlightHotelAndSpa.dto;
+package com.bootcamp3.MoonlightHotelAndSpa.dto.user;
 
 public class PasswordResetRequest {
 

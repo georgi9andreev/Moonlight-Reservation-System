@@ -1,6 +1,5 @@
 package com.bootcamp3.MoonlightHotelAndSpa.dto.user;
 
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableResponse;
 
 import java.time.Instant;

@@ -4,8 +4,8 @@ import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.user.*;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.*;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.*;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -21,13 +21,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_SUBJECT;
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_TEXT;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
 
 @RestController
@@ -71,12 +68,12 @@ public class UserController {
     @PostMapping
     @RegisterUserApiDocs
     public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRequest userRequest) {
-        User newUser = userServiceImpl.register(userRequest);
+        User newUser = userServiceImpl.registerUser(userRequest);
 
-        UserResponse responseUser = UserConverter.convertToUserDto(newUser);
+        UserResponse responseUser = UserConverter.convertToUserResponse(newUser);
 
-        String emailText = String.format(EMAIL_TEXT, userRequest.getName(), userRequest.getPassword());
-        emailService.sendEmail(userRequest.getEmail(), EMAIL_SUBJECT, emailText);
+        //String emailText = String.format(EMAIL_TEXT, userRequest.getName(), userRequest.getPassword());
+        //emailService.sendEmail(userRequest.getEmail(), EMAIL_SUBJECT, emailText);
 
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }
@@ -101,7 +98,7 @@ public class UserController {
     @FindUserByIdApiDocs
     public ResponseEntity<UserResponse> findUserById(@PathVariable Long id) {
 
-        UserResponse user = UserConverter.convertToUserDto(userServiceImpl.findUserById(id));
+        UserResponse user = UserConverter.convertToUserResponse(userServiceImpl.findUserById(id));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -110,11 +107,10 @@ public class UserController {
     @GetMapping
     @FindListOfAllUsersApiDocs
     public ResponseEntity<Set<UserResponse>> getListOfAllUsers() {
-        Set<UserResponse> userResponses = new HashSet<>();
 
-        for (User user : userServiceImpl.getUsers()) {
-            userResponses.add(UserConverter.convertToUserDto(user));
-        }
+        Set<UserResponse> userResponses = userServiceImpl.getUsers()
+                .stream()
+                .map(UserConverter::convertToUserResponse).collect(Collectors.toSet());
 
         return ResponseEntity.ok(userResponses);
     }
@@ -124,7 +120,7 @@ public class UserController {
     @UserUpdateApiDocs
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
 
-        UserResponse user = UserConverter.convertToUserDto(userServiceImpl.updateUser(id, userRequest));
+        UserResponse user = UserConverter.convertToUserResponse(userServiceImpl.updateUser(id, userRequest));
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

@@ -18,7 +18,4 @@ public class SecurityConstant {
             "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/tables", "/tables/{id}/reservations", "/{id}/reservations", "/tables/{id}",
             "/tables/{id}/reservations/{rid}", "/{id}/reservations/{rid}", "/users/{id}/tables/reservations", "/tables/{id}/summarize"};
     public static final String[] PROTECTED_URLS = {"/users/*", "/rooms/*"};
-
-    public static final String RANDOM_PASSWORD_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-+=/.,()[]{}!@#$%^&*abcdefghijklmnopqrstuvwxyz";
-    public static final int RANDOM_PASSWORD_LENGTH = 10;
 }

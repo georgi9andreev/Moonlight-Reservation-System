@@ -1,6 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
-import com.bootcamp3.MoonlightHotelAndSpa.model.AuthenticationRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.authentication.AuthenticationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.util.JwtTokenUtil;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;

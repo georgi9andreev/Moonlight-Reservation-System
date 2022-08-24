@@ -2,8 +2,8 @@ package com.bootcamp3.MoonlightHotelAndSpa.converter;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserReservationResponse;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
@@ -83,7 +83,7 @@ public class RoomReservationConverter {
     public static UserReservationResponse convertToUserReservationResponse(RoomReservation roomReservation) {
 
         User user = roomReservation.getUser();
-        UserResponse userResponse = UserConverter.convertToUserDto(user);
+        UserResponse userResponse = UserConverter.convertToUserResponse(user);
 
         Room room = roomReservation.getRoom();
         RoomResponse roomResponse = RoomConverter.convertToRoomResponse(room);
