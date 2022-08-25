@@ -1,9 +1,9 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.authentication.AuthenticationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.authentication.AuthenticationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.model.errormessage.ErrorResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.LoginService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/users")
-@Tag(name = "Login")
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Login", description = "Login actions")
 public class LoginController {
 
     private final LoginService loginService;

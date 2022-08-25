@@ -17,6 +17,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +26,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.*;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
 
 @RestController
-@RequestMapping(value = "/users", produces = "application/json")
-@Tag(name = "Users")
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Users", description = "Actions with Users")
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;
@@ -72,8 +74,8 @@ public class UserController {
 
         UserResponse responseUser = UserConverter.convertToUserResponse(newUser);
 
-        //String emailText = String.format(EMAIL_TEXT, userRequest.getName(), userRequest.getPassword());
-        //emailService.sendEmail(userRequest.getEmail(), EMAIL_SUBJECT, emailText);
+        String emailText = String.format(EMAIL_TEXT, userRequest.getName(), userRequest.getPassword());
+        emailService.sendEmail(userRequest.getEmail(), EMAIL_SUBJECT, emailText);
 
         return new ResponseEntity<>(responseUser, HttpStatus.CREATED);
     }

@@ -16,6 +16,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.service.RoomService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +26,8 @@ import java.util.stream.Collectors;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM_NOT_FOUND;
 
 @RestController
-@RequestMapping(value = "/rooms", produces = "application/json")
-@Tag(name = "Rooms")
+@RequestMapping(value = "/rooms", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Rooms", description = "Actions with Rooms")
 public class RoomController {
 
     private final RoomService roomService;
