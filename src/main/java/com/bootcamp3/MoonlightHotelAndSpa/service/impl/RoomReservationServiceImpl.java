@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM_RESERVATION_NOT_FOUND;
+
 @Service
 public class RoomReservationServiceImpl implements RoomReservationService {
 
@@ -69,7 +71,7 @@ public class RoomReservationServiceImpl implements RoomReservationService {
     public RoomReservation findById(Long id) {
 
         return roomReservationRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoudException(String.format("Reservation with id: %s, not found", id)));
+                .orElseThrow(() -> new RecordNotFoudException(String.format(ROOM_RESERVATION_NOT_FOUND, id)));
     }
 
     @Override

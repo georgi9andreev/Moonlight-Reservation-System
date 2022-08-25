@@ -37,7 +37,7 @@ public class RoomReservationConverter {
         Instant startDate = Instant.parse(request.getStart_date());
         Instant endDate = Instant.parse(request.getEnd_date());
 
-        Double totalPrice = calculateDays(startDate, endDate) * room.getPrice();
+        Double totalPrice = calculatePrice(calculateDays(startDate, endDate), room.getPrice());
 
         RoomReservation roomReservation = new RoomReservation();
         roomReservation.setCreatedAt(Instant.now());
@@ -58,8 +58,8 @@ public class RoomReservationConverter {
         Room room = roomService.findRoomById(id);
         RoomResponse roomResponse = RoomConverter.convertToRoomResponse(room);
 
-        Double totalPrice = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut()) * room.getPrice();
         int daysPeriod = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut());
+        Double totalPrice = calculatePrice(daysPeriod, room.getPrice());
 
         RoomReservationResponse roomReservationResponse = new RoomReservationResponse();
         roomReservationResponse.setId(roomReservation.getId());
@@ -74,12 +74,6 @@ public class RoomReservationConverter {
         return roomReservationResponse;
     }
 
-    private static Integer calculateDays(Instant startDate, Instant endDate) {
-
-        Long duration = Duration.between(startDate, endDate).toDays();
-
-        return duration.intValue();
-    }
     public static UserReservationResponse convertToUserReservationResponse(RoomReservation roomReservation) {
 
         User user = roomReservation.getUser();
@@ -89,7 +83,7 @@ public class RoomReservationConverter {
         RoomResponse roomResponse = RoomConverter.convertToRoomResponse(room);
 
         int daysPeriod = calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut());
-        Double totalPrice = daysPeriod * room.getPrice();
+        Double totalPrice = calculatePrice(daysPeriod, room.getPrice());
 
         UserReservationResponse userReservationResponse = new UserReservationResponse();
         userReservationResponse.setId(roomReservation.getId());
@@ -109,4 +103,15 @@ public class RoomReservationConverter {
         return userReservationResponse;
     }
 
+    private static Integer calculateDays(Instant startDate, Instant endDate) {
+
+        Long duration = Duration.between(startDate, endDate).toDays();
+
+        return duration.intValue();
+    }
+
+    private static double calculatePrice(int days, double price) {
+
+        return days * price;
+    }
 }

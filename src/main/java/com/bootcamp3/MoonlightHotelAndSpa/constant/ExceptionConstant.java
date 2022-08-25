@@ -10,4 +10,5 @@ public class ExceptionConstant {
     public static final String ACCESS_DENIED_LOGIN_FIRST = "Access denied! You need to login first in order to perform this action.";
     public static final String USER_EMAIL_NOT_FOUND = "User with email: %s, not found";
     public static final String EMAIL_EXIST = "Email: %s, already exist";
+    public static final String ROOM_RESERVATION_NOT_FOUND = "Room reservation with id: %s, not found";
 }
