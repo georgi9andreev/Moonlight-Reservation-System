@@ -5,7 +5,6 @@ import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.room.AvailableRoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RoomNotFoundException;
@@ -20,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -107,10 +107,12 @@ public class RoomController {
     //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping
     @GetAvailableRooms
-    public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestBody AvailableRoomRequest request) {
+    public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestParam Instant startDate,
+                                                                                 @RequestParam Instant endDate,
+                                                                                 @RequestParam int adults,
+                                                                                 @RequestParam int kids) {
 
-        List<Room> room = roomReservationService.findRoomByPeriodAndPeople(request.getStartDate(), request.getEndDate(),
-                request.getAdults(), request.getKids());
+        List<Room> room = roomReservationService.findRoomByPeriodAndPeople(startDate, endDate, adults, kids);
 
         List<RoomResponse> rooms = room.stream().map(RoomConverter::convertToRoomResponse).collect(Collectors.toList());
 
