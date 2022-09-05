@@ -1,6 +1,5 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
-import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.restaurant.UpdateTableApiDocs;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.*;
@@ -126,7 +125,6 @@ public class RestaurantController {
 
     //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
-    @UpdateTableApiDocs
     public ResponseEntity<TableResponse> updateTable(@PathVariable Long id, @RequestBody TableRequest request) {
 
         tableService.update(id, request);
