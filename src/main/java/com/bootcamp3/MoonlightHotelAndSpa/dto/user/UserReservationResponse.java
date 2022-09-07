@@ -1,4 +1,4 @@
-package com.bootcamp3.MoonlightHotelAndSpa.dto;
+package com.bootcamp3.MoonlightHotelAndSpa.dto.user;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.BedType;

@@ -13,17 +13,8 @@ public class RoomConverter {
     public static Room convertToRoom(RoomRequest roomRequest) {
 
         Room room = new Room();
-        room.setTitle(roomRequest.getTitle());
-        room.setImage(roomRequest.getImage());
-        room.setImages(getImagesFromRequest(roomRequest));
-        room.setDescription(roomRequest.getDescription());
-        room.setRoomView(roomRequest.getRoomView());
-        room.setArea(roomRequest.getArea());
-        room.setPeople(roomRequest.getPeople());
-        room.setPrice(roomRequest.getPrice());
-        room.setCount(roomRequest.getCount());
 
-        return room;
+        return convertRequestToRoom(room, roomRequest);
     }
 
     public static RoomResponse convertToRoomResponse (Room room) {
@@ -42,6 +33,11 @@ public class RoomConverter {
     }
 
     public static Room update(Room room, RoomRequest roomRequest) {
+
+       return convertRequestToRoom(room, roomRequest);
+    }
+
+    private static Room convertRequestToRoom(Room room, RoomRequest roomRequest) {
 
         room.setTitle(roomRequest.getTitle());
         room.setImage(roomRequest.getImage());

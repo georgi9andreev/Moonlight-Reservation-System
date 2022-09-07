@@ -2,9 +2,9 @@ package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
 import com.bootcamp3.MoonlightHotelAndSpa.configuration.PasswordEncoder;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.EmailRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.PasswordResetRequest;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.UserRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.EmailRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.PasswordResetRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.UserRepository;
@@ -14,15 +14,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_FORGOT_PASSWORD;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_FORGOT_PASSWORD_SUBJECT;
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.*;
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.SecurityConstant.*;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.USER_NOT_FOUND;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ResetPasswordConstant.TOKEN_DOES_NOT_MATCH;
 
 
 @Service
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User register(UserRequest userRequest) {
+    public User registerUser(UserRequest userRequest) {
 
         User user = UserConverter.convertToUser(userRequest);
         userRepository.save(user);
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User updateUser(Long id, UserRequest userRequest) {
 
         User user = findUserById(id);
-        userRepository.save(UserConverter.convertToUser(userRequest));
+        userRepository.save(UserConverter.update(user, userRequest));
 
         return user;
     }
@@ -97,23 +97,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userRepository.save(user);
         } else {
 
-            throw new BadCredentialsException("Token does not match");
+            throw new BadCredentialsException(TOKEN_DOES_NOT_MATCH);
         }
     }
 
-    private String generateNewPassword() {
-
-        String chars = RANDOM_PASSWORD_CHARS;
-
-        SecureRandom random = new SecureRandom();
-        StringBuilder sb = new StringBuilder(RANDOM_PASSWORD_LENGTH);
-
-        for (int i = 0; i < RANDOM_PASSWORD_LENGTH; i++)  {
-            sb.append(chars.charAt(random.nextInt(chars.length())));
-        }
-
-        return sb.toString();
-    }
+//    //Random password generator - forgot password
+//    private String generateNewPassword() {
+//
+//        String chars = RANDOM_PASSWORD_CHARS;
+//
+//        SecureRandom random = new SecureRandom();
+//        StringBuilder sb = new StringBuilder(RANDOM_PASSWORD_LENGTH);
+//
+//        for (int i = 0; i < RANDOM_PASSWORD_LENGTH; i++)  {
+//            sb.append(chars.charAt(random.nextInt(chars.length())));
+//        }
+//
+//        return sb.toString();
+//    }
 
     private String generateToken() {
 

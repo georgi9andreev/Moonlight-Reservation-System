@@ -1,4 +1,4 @@
-package com.bootcamp3.MoonlightHotelAndSpa.model;
+package com.bootcamp3.MoonlightHotelAndSpa.model.errormessage;
 
 public class ErrorMessage {
 

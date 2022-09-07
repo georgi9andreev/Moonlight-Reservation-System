@@ -1,30 +1,35 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
+import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.room.*;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
-import com.bootcamp3.MoonlightHotelAndSpa.dto.room.AvailableRoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RoomNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM_NOT_FOUND;
 
 @RestController
-@RequestMapping(value = "/rooms")
+@RequestMapping(value = "/rooms", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Rooms", description = "Actions with Rooms")
 public class RoomController {
 
     private final RoomService roomService;
@@ -36,7 +41,9 @@ public class RoomController {
         this.roomReservationService = roomReservationService;
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @PostMapping(value = "/{id}/reservations")
+    @CreateRoomReservationApiDocs
     public ResponseEntity<RoomReservationResponse> createRoomReservation(@PathVariable Long id, @RequestBody RoomReservationRequest request) {
 
         RoomReservation roomReservation = RoomReservationConverter.convertToRoomReservation(id, request);
@@ -48,7 +55,9 @@ public class RoomController {
         return new ResponseEntity<>(roomReservationResponse, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping
+    @CreateNewRoomApiDocs
     public ResponseEntity<RoomResponse> createRoom(@RequestBody RoomRequest request) {
 
         Room room = RoomConverter.convertToRoom(request);
@@ -60,17 +69,19 @@ public class RoomController {
         return new ResponseEntity<>(roomResponse, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RoomResponse> findById(@PathVariable Long id) {
+    @FindRoomByIdApiDocs
+    public ResponseEntity<RoomResponse> findRoomById(@PathVariable Long id) {
 
         RoomResponse room = RoomConverter.convertToRoomResponse(roomService.findRoomById(id));
 
         return new ResponseEntity<>(room, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
+    @UpdateRoomApiDocs
     public ResponseEntity<RoomResponse> updateRoom(@PathVariable Long id, @RequestBody RoomRequest request) {
 
         Room room = roomService.updateRoom(id, request);
@@ -80,8 +91,9 @@ public class RoomController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
+    @DeleteRoomByIdApiDocs
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
 
         try {
@@ -94,20 +106,24 @@ public class RoomController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @GetMapping
-    public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestBody AvailableRoomRequest request) {
+    @GetAvailableRooms
+    public ResponseEntity<List<RoomResponse>> getAvailableRoomsByPeriodAndGuests(@RequestParam Instant startDate,
+                                                                                 @RequestParam Instant endDate,
+                                                                                 @RequestParam int adults,
+                                                                                 @RequestParam int kids) {
 
-        List<Room> room = roomReservationService.findRoomByPeriodAndPeople(request.getStartDate(), request.getEndDate(),
-                request.getAdults(), request.getKids());
+        List<Room> room = roomReservationService.findRoomByPeriodAndPeople(startDate, endDate, adults, kids);
 
         List<RoomResponse> rooms = room.stream().map(RoomConverter::convertToRoomResponse).collect(Collectors.toList());
 
         return new ResponseEntity<>(rooms, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_CLIENT')")
+    //@PreAuthorize("hasAnyRole('ROLE_CLIENT')")
     @DeleteMapping(value = "/{id}/reservations/{rid}")
+    @DeleteReservationByIdAndRoomIdApiDocs
     public ResponseEntity<HttpStatus> deleteReservationByIdAndRoomId(@PathVariable Long id, @PathVariable Long rid) {
 
         try {
@@ -118,5 +134,16 @@ public class RoomController {
 
             throw new RuntimeException("Reservation can not be deleted");
         }
+    }
+
+    @GetMapping(value = "/filter")
+    public ResponseEntity<?> filterRoomsByViewAndRoomType(@RequestParam Instant startDate,
+                                                                          @RequestParam Instant endDate,
+                                                                          @RequestParam int adults,
+                                                                          @RequestParam int kids,
+                                                                          @RequestParam RoomView view,
+                                                                          @RequestParam RoomType roomType) {
+
+        return roomReservationService.filterRoomsByViewAndType(startDate, endDate, adults, kids, view, roomType);
     }
 }

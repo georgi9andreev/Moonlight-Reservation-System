@@ -11,8 +11,10 @@ import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/tables")
+@RequestMapping(value = "/tables", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Restaurant", description = "Actions with Restaurant tables")
 public class RestaurantController {
 
     private final TableService tableService;
@@ -120,6 +123,7 @@ public class RestaurantController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    //@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<TableResponse> updateTable(@PathVariable Long id, @RequestBody TableRequest request) {
 

@@ -1,6 +1,5 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
-import com.bootcamp3.MoonlightHotelAndSpa.exception.InvalidPhoneNumber;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +12,8 @@ import java.time.Instant;
 import java.util.*;
 
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.UserConstant.ROLE_PREFIX;
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.*;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.INVALID_EMAIL;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.INVALID_PHONE_SIZE;
 
 @Entity
 @Table(name = "users")
@@ -112,14 +112,7 @@ public class User implements UserDetails {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-
-        if (phoneNumber.startsWith("+") || phoneNumber.startsWith("00")) {
-            this.phoneNumber = phoneNumber;
-        } else {
-            throw new InvalidPhoneNumber(INVALID_PHONE);
-        }
-    }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
     public void setPassword(String password) {
         this.password = password;
