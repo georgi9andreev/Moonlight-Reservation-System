@@ -21,6 +21,12 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.VAL
 @RestControllerAdvice
 public class ExceptionHandling {
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorMessage> runtimeException(RuntimeException ex) {
+
+        return createHttpResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(RecordNotFoudException.class)
     public ResponseEntity<ErrorMessage> recordNotFound(RecordNotFoudException ex) {
 

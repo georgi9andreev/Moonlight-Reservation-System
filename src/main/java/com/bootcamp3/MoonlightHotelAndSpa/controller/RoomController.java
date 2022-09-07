@@ -7,6 +7,8 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationReq
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RoomNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
@@ -132,5 +134,16 @@ public class RoomController {
 
             throw new RuntimeException("Reservation can not be deleted");
         }
+    }
+
+    @GetMapping(value = "/filter")
+    public ResponseEntity<?> filterRoomsByViewAndRoomType(@RequestParam Instant startDate,
+                                                                          @RequestParam Instant endDate,
+                                                                          @RequestParam int adults,
+                                                                          @RequestParam int kids,
+                                                                          @RequestParam RoomView view,
+                                                                          @RequestParam RoomType roomType) {
+
+        return roomReservationService.filterRoomsByViewAndType(startDate, endDate, adults, kids, view, roomType);
     }
 }
