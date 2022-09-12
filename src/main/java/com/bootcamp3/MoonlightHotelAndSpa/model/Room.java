@@ -2,12 +2,14 @@ package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
+import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
+@Builder
 @Entity
 @Table(name = "rooms")
 public class Room {

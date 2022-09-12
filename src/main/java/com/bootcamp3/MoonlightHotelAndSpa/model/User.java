@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.UserConstant.ROLE_PREF
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.INVALID_EMAIL;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.INVALID_PHONE_SIZE;
 
+@Builder
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {

@@ -1,11 +1,13 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.BedType;
+import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
+@Builder
 @Entity
 @Table(name = "room_reservations")
 public class RoomReservation {
