@@ -46,12 +46,15 @@ public class RoomReservation {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
+    private String status;
+
     public RoomReservation() {
     }
 
     public RoomReservation(Long id, @NotNull Instant createdAt, @NotNull Instant checkIn,
                            @NotNull Instant checkOut, @NotNull Integer adults, @NotNull Integer kids,
-                           @NotNull User user, @NotNull Double totalPrice, @NotNull BedType facilities, Room room) {
+                           @NotNull User user, @NotNull Double totalPrice, @NotNull BedType facilities, Room room,
+                           String status) {
         this.id = id;
         this.createdAt = createdAt;
         this.checkIn = checkIn;
@@ -62,6 +65,7 @@ public class RoomReservation {
         this.totalPrice = totalPrice;
         this.facilities = facilities;
         this.room = room;
+        this.status = status;
     }
 
     public Long getId() {
@@ -142,5 +146,13 @@ public class RoomReservation {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

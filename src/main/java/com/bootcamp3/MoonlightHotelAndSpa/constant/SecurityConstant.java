@@ -17,6 +17,6 @@ public class SecurityConstant {
     public static final String[] PUBLIC_URLS = {"/users/token", "/users/forgot", "/users/reset", "/rooms/{id}/reservations", "/v3/api-docs",
             "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/tables", "/tables/{id}/reservations", "/{id}/reservations", "/tables/{id}",
             "/tables/{id}/reservations/{rid}", "/{id}/reservations/{rid}", "/users/{id}/tables/reservations", "/tables/{id}/summarize", "/contacts",
-            "/rooms/filter"};
+            "/rooms/filter", "/pay", "/pay/{id}", "/capture", "/orders", "/capture/{id}}"};
     public static final String[] PROTECTED_URLS = {"/users/*", "/rooms/*"};
 }

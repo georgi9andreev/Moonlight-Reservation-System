@@ -1,7 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.enumeration;
 
-public enum BedType {
+public enum ReservationStatus {
 
-    SINGLE_BED,
-    TWIN_BEDS
+    PAID,
+    UNPAID
 }
