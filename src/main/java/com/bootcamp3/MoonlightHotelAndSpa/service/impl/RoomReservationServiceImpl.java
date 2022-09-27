@@ -131,7 +131,7 @@ public class RoomReservationServiceImpl implements RoomReservationService {
                 errorMessages.add("Room with the selected view is not available for the specified dates");
             }
 
-            List<Room> filterByRoomType = filterBy(filterByView, isTypeEquals);
+            List<Room> filterByRoomType = filterBy(rooms, isTypeEquals);
 
             if (filterByRoomType.size() == 0) {
                 errorMessages.add("Room with the selected type is not available for the specified dates");
