@@ -2,7 +2,6 @@ package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.CreateOrder;
 import com.bootcamp3.MoonlightHotelAndSpa.service.PaymentService;
-import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,29 +16,32 @@ import java.net.URISyntaxException;
 public class PaypalController {
 
     private final PaymentService paymentService;
-    private final RoomReservationService roomReservationService;
+
 
     @Autowired
-    public PaypalController(PaymentService paymentService, RoomReservationService roomReservationService) {
+    public PaypalController(PaymentService paymentService) {
         this.paymentService = paymentService;
-        this.roomReservationService = roomReservationService;
     }
 
     @GetMapping("/capture")
-    public String captureOrder(@RequestParam String token){
-        paymentService.captureOrder(token);
+    public String captureOrder(@RequestParam String token, @RequestParam String roomReservationId){
+        long roomReservationIdString = Long.parseLong(roomReservationId);
+
+        paymentService.captureOrder(token, roomReservationIdString);
 
         return "redirect: orders";
     }
 
     @PostMapping("/pay")
     public String placeOrder(@RequestParam Long id, HttpServletRequest request){
-        final URI returnUrl = buildReturnUrl(request);
+        final URI returnUrl = buildReturnUrl(request, id);
         CreateOrder createOrder = paymentService.createOrder(id, returnUrl);
         return "redirect:"+createOrder.getApprovalLink();
     }
 
-    private URI buildReturnUrl(HttpServletRequest request) {
+    private URI buildReturnUrl(HttpServletRequest request, Long id) {
+        String roomReservationIdAsString = "roomReservationId=" + String.valueOf(id);
+
         try {
             URI requestUri = URI.create(request.getRequestURL().toString());
             return new URI(requestUri.getScheme(),
@@ -47,7 +49,8 @@ public class PaypalController {
                     requestUri.getHost(),
                     requestUri.getPort(),
                     "/capture",
-                    null, null);
+                    roomReservationIdAsString,
+                    null);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

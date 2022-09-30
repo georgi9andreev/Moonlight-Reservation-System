@@ -2,7 +2,10 @@ package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.CreateOrder;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.CurrencyCode;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.ReservationPaymentStatus;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
+import com.bootcamp3.MoonlightHotelAndSpa.model.User;
+import com.bootcamp3.MoonlightHotelAndSpa.service.EmailService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.PaymentService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.validator.RoomReservationValidator;
@@ -15,10 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
+
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_SUBJECT_PAYMENT;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -28,12 +32,14 @@ public class PaymentServiceImpl implements PaymentService {
     private final PayPalHttpClient payPalHttpClient;
     private final RoomReservationValidator roomReservationValidator;
     private final RoomReservationService roomReservationService;
+    private final EmailService emailService;
 
     @Autowired
     public PaymentServiceImpl(@Value("${paypal.client.id}") String clientId,
-                              @Value("${paypal.client.secret}") String clientSecret, RoomReservationValidator roomReservationValidator, RoomReservationService roomReservationService) {
+                              @Value("${paypal.client.secret}") String clientSecret, RoomReservationValidator roomReservationValidator, RoomReservationService roomReservationService, EmailService emailService) {
         this.roomReservationValidator = roomReservationValidator;
         this.roomReservationService = roomReservationService;
+        this.emailService = emailService;
         payPalHttpClient = new PayPalHttpClient(new PayPalEnvironment.Sandbox(clientId, clientSecret));
     }
 
@@ -88,9 +94,39 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @SneakyThrows
-    public void captureOrder(String orderId) {
+    @Transactional
+    public void captureOrder(String orderId, Long rid) {
         final OrdersCaptureRequest ordersCaptureRequest = new OrdersCaptureRequest(orderId);
         final HttpResponse<Order> httpResponse = payPalHttpClient.execute(ordersCaptureRequest);
+
+        changeRoomReservationPaymentStatus(rid);
+    }
+
+    private void sendPaymentInformationToUserEmail(User user, RoomReservation roomReservation) {
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("TotalPrice", roomReservation.getTotalPrice());
+        model.put("RoomType", roomReservation.getRoom().getTitle().toString());
+        model.put("Days", "2");
+        model.put("View", roomReservation.getRoom().getRoomView().toString());
+        model.put("BedType", "Double");
+        model.put("Adults", roomReservation.getAdults());
+        model.put("Kids", roomReservation.getKids());
+        model.put("StartDate", roomReservation.getCheckIn());
+        model.put("EndDate", roomReservation.getCheckOut());
+        model.put("Name", user.getFirstName() + " " + user.getLastName());
+        model.put("Address", "Some address");
+        model.put("Phone", user.getPhoneNumber());
+        model.put("email", user.getEmail());
+
+        emailService.sendHtmlEmail(user.getEmail(), EMAIL_SUBJECT_PAYMENT, model);
+    }
+
+    private void changeRoomReservationPaymentStatus(Long rid) {
+        RoomReservation foundRoomReservation = roomReservationService.findById(rid);
+        foundRoomReservation.setStatus(ReservationPaymentStatus.PAID);
+
+        sendPaymentInformationToUserEmail(foundRoomReservation.getUser(), foundRoomReservation);
     }
 
     private OrderRequest setApplicationContext(URI returnUrl, OrderRequest orderRequest) {

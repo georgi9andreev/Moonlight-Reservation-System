@@ -1,6 +1,7 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.BedType;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.ReservationPaymentStatus;
 import lombok.Builder;
 
 import javax.persistence.*;
@@ -46,7 +47,8 @@ public class RoomReservation {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ReservationPaymentStatus status = ReservationPaymentStatus.UNPAID;
 
     public RoomReservation() {
     }
@@ -54,7 +56,7 @@ public class RoomReservation {
     public RoomReservation(Long id, @NotNull Instant createdAt, @NotNull Instant checkIn,
                            @NotNull Instant checkOut, @NotNull Integer adults, @NotNull Integer kids,
                            @NotNull User user, @NotNull Double totalPrice, @NotNull BedType facilities, Room room,
-                           String status) {
+                           ReservationPaymentStatus status) {
         this.id = id;
         this.createdAt = createdAt;
         this.checkIn = checkIn;
@@ -148,11 +150,11 @@ public class RoomReservation {
         this.room = room;
     }
 
-    public String getStatus() {
+    public ReservationPaymentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReservationPaymentStatus status) {
         this.status = status;
     }
 }

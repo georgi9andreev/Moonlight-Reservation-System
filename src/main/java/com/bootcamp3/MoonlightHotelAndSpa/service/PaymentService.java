@@ -8,5 +8,5 @@ public interface PaymentService {
 
     CreateOrder createOrder(Long rid, URI returnUrl);
 
-    public void captureOrder(String orderId);
+    public void captureOrder(String orderId, Long rid);
 }
