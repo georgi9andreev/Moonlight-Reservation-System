@@ -11,4 +11,5 @@ public class EmailConstant {
             "\n \n Your new  temporary password is: %s \n \n Return to the site and sign in using this password. After you sign in " +
             "we encourage you to customize you password. \n \n Support team" ;
     public static final String EMAIL_FORGOT_PASSWORD_SUBJECT = "Your password has been changed";
+    public static final String EMAIL_SUBJECT_PAYMENT = "Successful payment";
  }

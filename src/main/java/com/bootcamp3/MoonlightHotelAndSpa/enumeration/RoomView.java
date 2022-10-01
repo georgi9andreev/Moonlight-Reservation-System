@@ -4,5 +4,5 @@ public enum RoomView {
 
     SEA,
     GARDEN,
-    SWIMMING_POOL;
+    SWIMMING_POOL
 }
