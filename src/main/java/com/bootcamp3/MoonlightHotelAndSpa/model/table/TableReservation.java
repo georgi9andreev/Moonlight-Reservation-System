@@ -14,8 +14,6 @@ public class TableReservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //Reservation date. ISO-8601 in UTC string
-    //TO DO
     private Instant date;
 
     private int people;
