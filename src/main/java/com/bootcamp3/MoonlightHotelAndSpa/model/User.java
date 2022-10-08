@@ -19,7 +19,7 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.INV
 
 @Builder
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = @Index(name = "user_name_index", columnList = "firstName, lastName"))
 public class User implements UserDetails {
 
     @Id
