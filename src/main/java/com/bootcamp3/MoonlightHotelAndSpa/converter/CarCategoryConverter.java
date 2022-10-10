@@ -9,11 +9,8 @@ public class CarCategoryConverter {
     public static CarCategory convertToCarCategory(CarCategoryRequest request) {
 
         CarCategory carCategory = new CarCategory();
-        carCategory.setTitle(request.getTitle());
-        carCategory.setSeats(request.getSeats());
-        carCategory.setPrice(request.getPrice());
 
-        return carCategory;
+        return createCarCategoryFromRequest(carCategory, request);
     }
 
     public static CarCategoryResponse convertToCarCategoryResponse(CarCategory carCategory) {
@@ -25,5 +22,19 @@ public class CarCategoryConverter {
         response.setPrice(carCategory.getPrice());
 
         return response;
+    }
+
+    public static CarCategory update(CarCategory carCategory, CarCategoryRequest carCategoryRequest) {
+
+        return createCarCategoryFromRequest(carCategory, carCategoryRequest);
+    }
+
+    private static CarCategory createCarCategoryFromRequest(CarCategory carCategory, CarCategoryRequest carCategoryRequest) {
+
+        carCategory.setTitle(carCategoryRequest.getTitle());
+        carCategory.setSeats(carCategoryRequest.getSeats());
+        carCategory.setPrice(carCategoryRequest.getPrice());
+
+        return carCategory;
     }
 }

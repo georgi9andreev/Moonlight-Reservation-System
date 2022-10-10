@@ -29,15 +29,8 @@ public class CarConverter {
         CarCategory carCategory = carCategoryService.findCategoryById(carRequest.getCategory());
 
         Car car = new Car();
-        car.setCategory(carCategory);
-        car.setBrand(carRequest.getBrand());
-        car.setModel(carRequest.getModel());
-        car.setImage(carRequest.getImage());
-        car.setImages(getImagesFromRequest(carRequest));
-        car.setYear(carRequest.getYear());
-        car.setCreated(Instant.now().toString());
 
-        return car;
+        return createCarFromRequest(car, carRequest);
     }
 
     public static CarResponse convertToCarResponse(Car car) {
@@ -53,6 +46,26 @@ public class CarConverter {
         carResponse.setCategory(CarCategoryConverter.convertToCarCategoryResponse(car.getCategory()));
 
         return carResponse;
+    }
+
+    public static Car update(Car car, CarRequest carRequest) {
+
+        return createCarFromRequest(car, carRequest);
+    }
+
+    private static Car createCarFromRequest(Car car, CarRequest carRequest) {
+
+        CarCategory carCategory = carCategoryService.findCategoryById(carRequest.getCategory());
+
+        car.setCategory(carCategory);
+        car.setBrand(carRequest.getBrand());
+        car.setModel(carRequest.getModel());
+        car.setImage(carRequest.getImage());
+        car.setImages(getImagesFromRequest(carRequest));
+        car.setYear(carRequest.getYear());
+        car.setCreated(Instant.now().toString());
+
+        return car;
     }
 
     private static Set<Image> getImagesFromRequest(CarRequest request) {

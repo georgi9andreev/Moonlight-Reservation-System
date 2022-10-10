@@ -23,17 +23,30 @@ public class CarCategoryServiceImpl implements CarCategoryService {
     }
 
     @Override
-    public CarCategoryResponse createCarCategory(CarCategoryRequest request) {
+    public void createCarCategory(CarCategory carCategory) {
 
-        CarCategory carCategory = CarCategoryConverter.convertToCarCategory(request);
-        carCategoryRepository.save(Objects.requireNonNull(carCategory));
-
-        return CarCategoryConverter.convertToCarCategoryResponse(carCategory);
+        carCategoryRepository.save(carCategory);
     }
 
     @Override
     public CarCategory findCategoryById(Long id) {
         return carCategoryRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoudException("Category not found"));
+    }
+
+    @Override
+    public void deleteCarCategoryById(Long id) {
+        carCategoryRepository.deleteById(id);
+    }
+
+    @Override
+    public CarCategory updateCarCategory(Long id, CarCategoryRequest carCategoryRequest) {
+
+        CarCategory foundCarCategory = findCategoryById(id);
+
+        CarCategory updatedCarCategory = CarCategoryConverter.update(foundCarCategory, carCategoryRequest);
+        createCarCategory(updatedCarCategory);
+
+        return updatedCarCategory;
     }
 }
