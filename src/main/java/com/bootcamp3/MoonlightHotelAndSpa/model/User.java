@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model;
 
+import com.bootcamp3.MoonlightHotelAndSpa.model.car.CarTransfer;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +19,7 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ValidationConstant.INV
 
 @Builder
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = @Index(name = "user_name_index", columnList = "firstName, lastName"))
 public class User implements UserDetails {
 
     @Id
@@ -61,11 +62,15 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<TableReservation> tableReservations;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CarTransfer> transfers;
+
     public User() {
     }
 
     public User(Long id, String firstName, String lastName, String email, String phoneNumber, String password, Set<Role> roles,
-                Instant createdAt, List<RoomReservation> reservations, List<TableReservation> tableReservations) {
+                Instant createdAt, List<RoomReservation> reservations, List<TableReservation> tableReservations,
+                List<CarTransfer> transfers) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -76,6 +81,7 @@ public class User implements UserDetails {
         this.createdAt = createdAt;
         this.reservations = reservations;
         this.tableReservations = tableReservations;
+        this.transfers = transfers;
     }
 
     public Long getId() {
@@ -150,6 +156,14 @@ public class User implements UserDetails {
 
     public void setTableReservations(List<TableReservation> tableReservations) {
         this.tableReservations = tableReservations;
+    }
+
+    public List<CarTransfer> getTransfers() {
+        return transfers;
+    }
+
+    public void setTransfers(List<CarTransfer> transfers) {
+        this.transfers = transfers;
     }
 
     @Override

@@ -34,6 +34,12 @@ paypal:
     id: AU01GSIj2ustKuEdWCZ3C9RSMbxF6Jbfm5rFp8813LTxS1YcYCM3GpJyS5gwlke11QIR9PDPGmg8YOR4
     secret: EOHGJa6oI30xmFnmUuY70oEA-c7CiDLBvdg_vndjNmi-0fj_ZkINMXOxVso09D5y26jbZyLilgkqKNC6
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /api-docs
+
 jwt:
   secret: "Secret903242375jwfkdsf3924239wjfdsfsdf9r8423rwfsdfmsrp928490g312ewdsacxzce4332reefdsfsdf23234"
 
@@ -77,3 +83,9 @@ jwt:
 #  client:
 #    id: AU01GSIj2ustKuEdWCZ3C9RSMbxF6Jbfm5rFp8813LTxS1YcYCM3GpJyS5gwlke11QIR9PDPGmg8YOR4
 #    secret: EOHGJa6oI30xmFnmUuY70oEA-c7CiDLBvdg_vndjNmi-0fj_ZkINMXOxVso09D5y26jbZyLilgkqKNC6
+#
+#springdoc:
+#  api-docs:
+#    path: /api-docs
+#  swagger-ui:
+#    path: /api-docs
