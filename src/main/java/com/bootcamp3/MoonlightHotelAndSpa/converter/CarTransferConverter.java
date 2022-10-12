@@ -59,8 +59,10 @@ public class CarTransferConverter {
 
     private static Instant convertTransferDateToInstant(String transferDate) {
 
+        String concatenatedDate = transferDate + " " + "00:00:00";
+
         return LocalDateTime
-                .parse(transferDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                .parse(concatenatedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 .atZone(ZoneId.systemDefault())
                 .toInstant();
     }

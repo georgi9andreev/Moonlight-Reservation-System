@@ -27,7 +27,11 @@ public class CarTransferServiceImpl implements CarTransferService {
 
     @Override
     public CarTransfer createCarTransfer(Long id, CarTransferRequest carTransferRequest, User user) {
-        return CarTransferConverter.convertToCarTransfer(id, carTransferRequest, user);
+
+        CarTransfer carTransfer = CarTransferConverter.convertToCarTransfer(id, carTransferRequest, user);
+        carTransferRepository.save(carTransfer);
+
+        return carTransfer;
     }
 
     @Override

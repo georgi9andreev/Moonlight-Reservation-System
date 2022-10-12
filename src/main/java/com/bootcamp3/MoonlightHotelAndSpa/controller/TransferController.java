@@ -19,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,5 +123,19 @@ public class TransferController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(carTransferResponses, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/available")
+    public ResponseEntity<List<CarResponse>> getAvailableCars(@RequestParam Instant date,
+                                                              @RequestParam int seats) {
+
+        List<Car> getAvailableCarsBySeatsAndCarTransferDate = carService.getAvailableCars(seats, date);
+
+        List<CarResponse> carResponses = getAvailableCarsBySeatsAndCarTransferDate
+                .stream()
+                .map(CarConverter::convertToCarResponse)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(carResponses, HttpStatus.OK);
     }
 }
