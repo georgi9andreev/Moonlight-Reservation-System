@@ -1,7 +1,9 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
@@ -142,6 +144,45 @@ public class RoomReservationServiceImpl implements RoomReservationService {
 
         List<RoomResponse> roomResponse = filteredRooms.stream().map(RoomConverter::convertToRoomResponse).collect(Collectors.toList());
         return new ResponseEntity<>(roomResponse, HttpStatus.OK);
+    }
+
+    @Override
+    public List<RoomReservation> getReservationsByRoomId(Long id) {
+
+        Room foundRoom = roomService.findRoomById(id);
+
+        return foundRoom.getRoomReservation();
+    }
+
+    @Override
+    public RoomReservation getRoomReservationByIdAndRoomId(Long id, Long rid) {
+
+        Room foundRoom = roomService.findRoomById(id);
+        RoomReservation roomReservation = findById(rid);
+
+        if (!foundRoom.getId().equals(roomReservation.getRoom().getId())) {
+
+            throw new RuntimeException("Room id does not match to reservation");
+        }
+
+        return roomReservation;
+    }
+
+    @Override
+    public RoomReservation updateRoomReservationByIdAndRoomId(Long id, Long rid, UserReservationRequest userReservationRequest) {
+
+        Room foundRoom = roomService.findRoomById(id);
+        RoomReservation roomReservation = findById(rid);
+
+        if (!foundRoom.getId().equals(roomReservation.getRoom().getId())) {
+
+            throw new RuntimeException("Room id does not match to reservation");
+        }
+
+        RoomReservation updatedRoomReservation = RoomReservationConverter.update(foundRoom, roomReservation, userReservationRequest);
+        save(updatedRoomReservation);
+
+        return updatedRoomReservation;
     }
 
     private List<Room> filterBy(List<Room> rooms, Predicate<Room> predicate) {

@@ -12,8 +12,10 @@ import com.bootcamp3.MoonlightHotelAndSpa.model.car.CarTransfer;
 import com.bootcamp3.MoonlightHotelAndSpa.service.CarCategoryService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.CarService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.CarTransferService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(value = "cars")
+@RequestMapping(value = "cars", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Transfers", description = "Actions with Transfers")
 public class TransferController {
 
     private final CarCategoryService carCategoryService;

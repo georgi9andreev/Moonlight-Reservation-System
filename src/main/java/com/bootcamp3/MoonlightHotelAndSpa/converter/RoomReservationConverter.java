@@ -2,9 +2,11 @@ package com.bootcamp3.MoonlightHotelAndSpa.converter;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.ReservationPaymentStatus;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -101,6 +103,29 @@ public class RoomReservationConverter {
         userReservationResponse.setUser(userResponse);
 
         return userReservationResponse;
+    }
+
+    public static RoomReservation update(Room room, RoomReservation roomReservation, UserReservationRequest userReservationRequest) {
+
+        User user = userService.findUserById(userReservationRequest.getUser());
+
+        Instant startDate = Instant.parse(userReservationRequest.getStart_date());
+        Instant endDate = Instant.parse(userReservationRequest.getEnd_date());
+
+        int days = calculateDays(startDate, endDate);
+        double totalPrice = calculatePrice(days, room.getPrice());
+
+        roomReservation.setCheckIn(startDate);
+        roomReservation.setCheckOut(endDate);
+        roomReservation.setAdults(userReservationRequest.getAdults());
+        roomReservation.setKids(userReservationRequest.getKids());
+        roomReservation.setStatus(ReservationPaymentStatus.PAID);
+        roomReservation.setFacilities(userReservationRequest.getType_bed());
+        roomReservation.setTotalPrice(totalPrice);
+        roomReservation.setRoom(room);
+        roomReservation.setUser(user);
+
+        return roomReservation;
     }
 
     private static Integer calculateDays(Instant startDate, Instant endDate) {
