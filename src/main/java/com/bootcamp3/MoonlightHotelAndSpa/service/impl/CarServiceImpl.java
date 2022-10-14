@@ -9,6 +9,9 @@ import com.bootcamp3.MoonlightHotelAndSpa.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.List;
+
 @Service
 public class CarServiceImpl implements CarService {
 
@@ -45,5 +48,11 @@ public class CarServiceImpl implements CarService {
     public Car findCarById(Long id) {
         return carRepository.findById(id)
                 .orElseThrow(() -> new RecordNotFoudException(String.format("Car with id: %d, not found", id)));
+    }
+
+    @Override
+    public List<Car> getAvailableCars(int seats, Instant date) {
+
+        return carRepository.findCarsBySeatsAndCarTransferDate(seats, date);
     }
 }

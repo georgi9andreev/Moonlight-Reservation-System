@@ -7,6 +7,8 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationReq
 import com.bootcamp3.MoonlightHotelAndSpa.dto.RoomReservation.RoomReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RoomNotFoundException;
@@ -145,5 +147,38 @@ public class RoomController {
                                                                           @RequestParam RoomType roomType) {
 
         return roomReservationService.filterRoomsByViewAndType(startDate, endDate, adults, kids, view, roomType);
+    }
+
+    @GetMapping(value = "/{id}/reservations")
+    public ResponseEntity<List<UserReservationResponse>> getRoomReservationsByRoomId(@PathVariable Long id) {
+
+        List<RoomReservation> roomReservations = roomReservationService.getReservationsByRoomId(id);
+
+        List<UserReservationResponse> userReservationResponseList = roomReservations
+                .stream()
+                .map(RoomReservationConverter::convertToUserReservationResponse)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(userReservationResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<UserReservationResponse> getRoomReservationByIdAndRoomId(@PathVariable Long id, @PathVariable Long rid) {
+
+        RoomReservation roomReservation = roomReservationService.getRoomReservationByIdAndRoomId(id, rid);
+
+        UserReservationResponse userReservationResponse = RoomReservationConverter.convertToUserReservationResponse(roomReservation);
+
+        return new ResponseEntity<>(userReservationResponse, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}/reservations/{rid}")
+    public ResponseEntity<UserReservationResponse> updateRoomReservationByIdAndRoomId(@PathVariable Long id, @PathVariable Long rid, @RequestBody UserReservationRequest userReservationRequest) {
+
+        RoomReservation roomReservation = roomReservationService.updateRoomReservationByIdAndRoomId(id, rid, userReservationRequest);
+
+        UserReservationResponse userReservationResponse = RoomReservationConverter.convertToUserReservationResponse(roomReservation);
+
+        return new ResponseEntity<>(userReservationResponse, HttpStatus.OK);
     }
 }

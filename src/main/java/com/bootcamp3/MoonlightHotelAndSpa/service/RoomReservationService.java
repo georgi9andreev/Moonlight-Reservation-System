@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service;
 
+import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
@@ -27,4 +28,10 @@ public interface RoomReservationService {
     void deleteByRoomIdAndReservationId(Long id, Long rid);
 
     ResponseEntity<?> filterRoomsByViewAndType(Instant startDate, Instant endDate, int adults, int kids, RoomView view, RoomType roomType);
+
+    List<RoomReservation> getReservationsByRoomId(Long id);
+
+    RoomReservation getRoomReservationByIdAndRoomId(Long id, Long rid);
+
+    RoomReservation updateRoomReservationByIdAndRoomId(Long id, Long rid, UserReservationRequest userReservationRequest);
 }
