@@ -2,6 +2,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.CreateOrder;
 import com.bootcamp3.MoonlightHotelAndSpa.service.PaymentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
+@Tag(name = "Payment", description = "Payment actions")
 public class PaypalController {
 
     private final PaymentService paymentService;
