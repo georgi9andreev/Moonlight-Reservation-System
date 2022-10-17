@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
+import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.transfer.*;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.CarCategoryConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.CarConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.CarTransferConverter;
@@ -18,14 +19,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping(value = "cars", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Transfers", description = "Actions with Transfers")
 public class TransferController {
@@ -42,6 +42,7 @@ public class TransferController {
     }
 
     @PostMapping(value = "categories")
+    @CreateCarCategoryApiDocs
     public ResponseEntity<CarCategoryResponse> createCarCategory(@RequestBody CarCategoryRequest request) {
 
         CarCategory carCategory = CarCategoryConverter.convertToCarCategory(request);
@@ -52,6 +53,7 @@ public class TransferController {
     }
 
     @PostMapping
+    @CreateNewCarApiDocs
     public ResponseEntity<CarResponse> createCar(@RequestBody CarRequest request) {
 
         Car car = CarConverter.convertToCar(request);
@@ -62,6 +64,7 @@ public class TransferController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @DeleteCarApiDocs
     public ResponseEntity<HttpStatus> deleteCar(@PathVariable Long id) {
 
         try {
@@ -74,6 +77,7 @@ public class TransferController {
     }
 
     @DeleteMapping(value = "/categories/{id}")
+    @DeleteCarCategoryApiDocs
     public ResponseEntity<HttpStatus> deleteCarCategory(@PathVariable Long id) {
 
         try {
@@ -86,6 +90,7 @@ public class TransferController {
     }
 
     @PutMapping(value = "/{id}")
+    @UpdateCarApiDocs
     public ResponseEntity<CarResponse> updateCar(@PathVariable Long id, @RequestBody CarRequest carRequest) {
 
         Car updatedCar = carService.updateCarById(id, carRequest);
@@ -96,6 +101,7 @@ public class TransferController {
     }
 
     @PutMapping(value = "/categories/{id}")
+    @UpdateCarCategoryApiDocs
     public ResponseEntity<CarCategoryResponse> updateCarCategory(@PathVariable Long id, @RequestBody CarCategoryRequest carCategoryRequest) {
 
         CarCategory updatedCarCategory = carCategoryService.updateCarCategory(id, carCategoryRequest);
@@ -106,6 +112,7 @@ public class TransferController {
     }
 
     @PostMapping(value = "/{id}/transfers")
+    @CreateCarTransferApiDocs
     public ResponseEntity<CarTransferResponse> createCarTransfer(@PathVariable Long id, @RequestBody CarTransferRequest carTransferRequest,
                                                                  @AuthenticationPrincipal User user) {
 
@@ -116,6 +123,7 @@ public class TransferController {
     }
 
     @GetMapping(value = "/{id}/transfers")
+    @GetCarTransfersApiDocs
     public ResponseEntity<List<CarTransferResponse>> getAllTransfersByCarId(@PathVariable Long id) {
 
         List<CarTransfer> carTransfers = carTransferService.getAllTransfersByCarId(id);
@@ -129,6 +137,7 @@ public class TransferController {
     }
 
     @GetMapping(value = "/available")
+    @GetAvailableCars
     public ResponseEntity<List<CarResponse>> getAvailableCars(@RequestParam Instant date,
                                                               @RequestParam int seats) {
 
