@@ -7,7 +7,9 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.user.PasswordResetRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
+import com.bootcamp3.MoonlightHotelAndSpa.model.car.CarTransfer;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.UserRepository;
+import com.bootcamp3.MoonlightHotelAndSpa.service.CarTransferService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,11 +33,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final EmailServiceImpl emailService;
+    private final CarTransferService carTransferService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, EmailServiceImpl emailService) {
+    public UserServiceImpl(UserRepository userRepository, EmailServiceImpl emailService, CarTransferService carTransferService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
+        this.carTransferService = carTransferService;
     }
 
     @Override
@@ -99,6 +104,34 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             throw new BadCredentialsException(TOKEN_DOES_NOT_MATCH);
         }
+    }
+
+    @Override
+    public List<CarTransfer> getCarTransfers(Long id) {
+
+        User foundUser = findUserById(id);
+
+        return foundUser.getTransfers();
+    }
+
+    @Override
+    public List<CarTransfer> getAllCarTransfers() {
+        return carTransferService.getAllTransfers();
+    }
+
+    @Override
+    public CarTransfer getCarTransferByIdAndUserId(Long id, Long tid) {
+
+        User foundUser = findUserById(id);
+
+        CarTransfer foundCarTransfer = carTransferService.findCarTransferById(tid);
+
+        if (!foundUser.getId().equals(foundCarTransfer.getUser().getId())) {
+
+            throw new RuntimeException("User id does not match with Car transfer");
+        }
+
+        return foundCarTransfer;
     }
 
 //    //Random password generator - forgot password

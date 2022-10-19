@@ -3,6 +3,7 @@ package com.bootcamp3.MoonlightHotelAndSpa;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.UserRepository;
+import com.bootcamp3.MoonlightHotelAndSpa.service.CarTransferService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.EmailServiceImpl;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
@@ -27,11 +28,14 @@ public class UserServiceImplTest {
     private UserService userService;
 
     @Mock
+    private CarTransferService carTransferService;
+
+    @Mock
     private EmailServiceImpl emailService;
 
     @BeforeEach
     public void setUp() {
-        userService  = new UserServiceImpl(userRepository, emailService);
+        userService  = new UserServiceImpl(userRepository, emailService, carTransferService);
     }
 
     @Test

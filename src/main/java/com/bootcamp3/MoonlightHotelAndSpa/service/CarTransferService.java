@@ -11,4 +11,8 @@ public interface CarTransferService {
     CarTransfer createCarTransfer(Long id, CarTransferRequest carTransferRequest, User user);
 
     List<CarTransfer> getAllTransfersByCarId(Long id);
+
+    List<CarTransfer> getAllTransfers();
+
+    CarTransfer findCarTransferById(Long id);
 }
