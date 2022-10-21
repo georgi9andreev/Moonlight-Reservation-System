@@ -2,15 +2,16 @@ package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.CreateOrder;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.PaymentDto;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.*;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.ClassType;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.Table;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
-import com.bootcamp3.MoonlightHotelAndSpa.service.TableReservationService;
-import com.bootcamp3.MoonlightHotelAndSpa.service.TableService;
-import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
+import com.bootcamp3.MoonlightHotelAndSpa.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,12 +32,14 @@ public class RestaurantController {
     private final TableService tableService;
     private final TableReservationService tableReservationService;
     private final UserService userService;
+    private final PaymentService paymentService;
 
     @Autowired
-    public RestaurantController(TableService tableService, TableReservationService tableReservationService, UserService userService) {
+    public RestaurantController(TableService tableService, TableReservationService tableReservationService, UserService userService, PaymentService paymentService) {
         this.tableService = tableService;
         this.tableReservationService = tableReservationService;
         this.userService = userService;
+        this.paymentService = paymentService;
     }
 
     @PutMapping(value = "/{id}/reservations/{rid}")
@@ -113,9 +117,7 @@ public class RestaurantController {
         //TO DO
         // 1.Validator to check is Table not reserved
 
-        User foundUser = userService.findUserById(user.getId());
-
-        TableReservation tableReservation = TableReservationConverter.convertToTableReservation(id, request, foundUser);
+        TableReservation tableReservation = TableReservationConverter.convertToTableReservation(id, request, user);
         tableReservationService.save(tableReservation);
 
         TableReservationResponse response = TableReservationConverter.convertToTableReservationResponse(tableReservation);
@@ -155,5 +157,34 @@ public class RestaurantController {
         TableReservationResponse tableReservationResponse = TableReservationConverter.convertToTableReservationResponse(tableReservation);
 
         return new ResponseEntity<>(tableReservationResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/capture")
+    public String captureOrder(@RequestParam String token, @RequestParam String tableReservationId){
+        long tableReservationIdAsLong = Long.parseLong(tableReservationId);
+
+        paymentService.captureOrder(token, tableReservationIdAsLong);
+        tableReservationService.changeTableReservationPaymentStatus(tableReservationIdAsLong);
+
+        return "redirect: orders";
+    }
+
+    @PostMapping(value = "/pay")
+    public String placeOrder(@RequestParam Long id, HttpServletRequest request){
+
+        TableReservation foundTableReservation = tableReservationService.findTableReservationById(id);
+
+        PaymentDto payment = PaymentDto.builder()
+                .id(id)
+                .classTypeId(ClassType.TABLE_RESERVATION.getValue)
+                .description("Table reservation")
+                .itemDescription("Table")
+                .totalAmount(foundTableReservation.getPrice())
+                .capturePath("/tables/capture")
+                .build();
+
+        CreateOrder createOrder = paymentService.createOrder(payment, request);
+
+        return createOrder.getApprovalLink().toString();
     }
 }

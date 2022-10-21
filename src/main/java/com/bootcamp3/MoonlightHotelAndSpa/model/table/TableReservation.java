@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model.table;
 
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.PaymentStatus;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 
 import javax.persistence.Table;
@@ -22,6 +23,9 @@ public class TableReservation {
 
     private String updated;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
+
     @ManyToOne
     @JoinColumn(name = "table_id")
     private com.bootcamp3.MoonlightHotelAndSpa.model.table.Table table;
@@ -33,13 +37,14 @@ public class TableReservation {
     public TableReservation() {
     }
 
-    public TableReservation(Long id, Instant date, int people, double price, String updated,
+    public TableReservation(Long id, Instant date, int people, double price, String updated, PaymentStatus paymentStatus,
                             com.bootcamp3.MoonlightHotelAndSpa.model.table.Table table, User user) {
         this.id = id;
         this.date = date;
         this.people = people;
         this.price = price;
         this.updated = updated;
+        this.paymentStatus = paymentStatus;
         this.table = table;
         this.user = user;
     }
@@ -82,6 +87,14 @@ public class TableReservation {
 
     public void setUpdated(String updated) {
         this.updated = updated;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public com.bootcamp3.MoonlightHotelAndSpa.model.table.Table getTable() {

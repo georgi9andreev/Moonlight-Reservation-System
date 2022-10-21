@@ -1,5 +1,6 @@
 package com.bootcamp3.MoonlightHotelAndSpa.model.car;
 
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.PaymentStatus;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 
 import javax.persistence.*;
@@ -19,6 +20,9 @@ public class CarTransfer {
 
     private String created;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus = PaymentStatus.UNPAID;
+
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
@@ -30,11 +34,13 @@ public class CarTransfer {
     public CarTransfer() {
     }
 
-    public CarTransfer(Long id, Double price, Instant date, String created, Car car, User user) {
+    public CarTransfer(Long id, Double price, Instant date, String created, PaymentStatus paymentStatus,
+                       Car car, User user) {
         this.id = id;
         this.price = price;
         this.date = date;
         this.created = created;
+        this.paymentStatus = paymentStatus;
         this.car = car;
         this.user = user;
     }
@@ -69,6 +75,14 @@ public class CarTransfer {
 
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public Car getCar() {

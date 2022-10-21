@@ -39,7 +39,9 @@ public class SecurityConstant {
             "/capture/{id}}",
             "/rooms/*",
             "/cars/{id}/transfers",
-            "/cars/available"};
+            "/cars/available",
+            "/cars/pay",
+            "/cars/capture"};
     public static final String[] PROTECTED_URLS = {"/users/*"};
 
 }

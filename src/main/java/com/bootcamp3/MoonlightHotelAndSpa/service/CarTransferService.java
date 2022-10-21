@@ -15,4 +15,6 @@ public interface CarTransferService {
     List<CarTransfer> getAllTransfers();
 
     CarTransfer findCarTransferById(Long id);
+
+    void changeCarTransferPaymentStatus(Long id);
 }

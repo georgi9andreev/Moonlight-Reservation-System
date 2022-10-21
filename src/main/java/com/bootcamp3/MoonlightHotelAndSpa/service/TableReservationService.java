@@ -28,4 +28,6 @@ public interface TableReservationService {
     List<TableReservation> getTableReservationsByUser(Long id);
 
     TableReservation summarizeTableReservation(Long id, TableReservationRequest request, User user);
+
+    void changeTableReservationPaymentStatus(Long id);
 }

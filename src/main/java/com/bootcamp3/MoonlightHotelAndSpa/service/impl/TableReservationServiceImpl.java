@@ -3,6 +3,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationUpdateRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.PaymentStatus;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.table.TableZone;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -122,5 +123,13 @@ public class TableReservationServiceImpl implements TableReservationService {
 
         Table foundTable = tableService.findById(id);
         return TableReservationConverter.convertToTableReservation(id, request, user);
+    }
+
+    @Override
+    public void changeTableReservationPaymentStatus(Long id) {
+
+        TableReservation foundTableReservation = findTableReservationById(id);
+        foundTableReservation.setPaymentStatus(PaymentStatus.PAID);
+        tableReservationRepository.save(foundTableReservation);
     }
 }

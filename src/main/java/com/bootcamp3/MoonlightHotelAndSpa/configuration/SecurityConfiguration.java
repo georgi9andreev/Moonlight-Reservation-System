@@ -2,6 +2,7 @@ package com.bootcamp3.MoonlightHotelAndSpa.configuration;
 
 import com.bootcamp3.MoonlightHotelAndSpa.exception.CustomHttp403ForbiddenEntryPoint;
 import com.bootcamp3.MoonlightHotelAndSpa.filter.CustomAccessDeniedHandler;
+import com.bootcamp3.MoonlightHotelAndSpa.filter.JwtTokenFilter;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.UserServiceImpl;
 import com.bootcamp3.MoonlightHotelAndSpa.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -52,12 +54,12 @@ public class SecurityConfiguration {
                         //.antMatchers(HttpMethod.GET, "/users", "/rooms").hasAnyAuthority(ADMIN)
                         //.anyRequest().denyAll())
                         .anyRequest().permitAll())
-                //.addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
-                //.authorizeRequests()
-                //.and()
+                .addFilterBefore(new JwtTokenFilter(jwtTokenUtil, userService), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
+                .and()
                 .exceptionHandling()
-                //.accessDeniedHandler(accessDeniedHandler)
-                //.authenticationEntryPoint(authenticationEntryPint)
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPint)
                 .and()
                 .cors()
                 .and()

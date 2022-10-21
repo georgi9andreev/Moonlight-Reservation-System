@@ -1,12 +1,13 @@
 package com.bootcamp3.MoonlightHotelAndSpa.service;
 
 import com.bootcamp3.MoonlightHotelAndSpa.dto.CreateOrder;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.PaymentDto;
 
-import java.net.URI;
+import javax.servlet.http.HttpServletRequest;
 
 public interface PaymentService {
 
-    CreateOrder createOrder(Long rid, URI returnUrl);
+    CreateOrder createOrder(PaymentDto payment, HttpServletRequest request);
 
     public void captureOrder(String orderId, Long rid);
 }

@@ -34,4 +34,6 @@ public interface RoomReservationService {
     RoomReservation getRoomReservationByIdAndRoomId(Long id, Long rid);
 
     RoomReservation updateRoomReservationByIdAndRoomId(Long id, Long rid, UserReservationRequest userReservationRequest);
+
+    void changeRoomReservationPaymentStatus(Long rid);
 }
