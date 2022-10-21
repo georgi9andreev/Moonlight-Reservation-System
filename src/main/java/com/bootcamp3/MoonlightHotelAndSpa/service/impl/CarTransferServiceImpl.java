@@ -2,6 +2,8 @@ package com.bootcamp3.MoonlightHotelAndSpa.service.impl;
 
 import com.bootcamp3.MoonlightHotelAndSpa.converter.CarTransferConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.transfer.CarTransferRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.PaymentStatus;
+import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.car.Car;
 import com.bootcamp3.MoonlightHotelAndSpa.model.car.CarTransfer;
@@ -40,5 +42,24 @@ public class CarTransferServiceImpl implements CarTransferService {
         Car foundCar = carService.findCarById(id);
 
         return foundCar.getCarTransfers();
+    }
+
+    @Override
+    public List<CarTransfer> getAllTransfers() {
+        return carTransferRepository.findAll();
+    }
+
+    @Override
+    public CarTransfer findCarTransferById(Long id) {
+        return carTransferRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoudException(String.format("Cart transfer with id: %d, not found", id)));
+    }
+
+    @Override
+    public void changeCarTransferPaymentStatus(Long id) {
+
+        CarTransfer foundCarTransfer = findCarTransferById(id);
+        foundCarTransfer.setPaymentStatus(PaymentStatus.PAID);
+        carTransferRepository.save(foundCarTransfer);
     }
 }

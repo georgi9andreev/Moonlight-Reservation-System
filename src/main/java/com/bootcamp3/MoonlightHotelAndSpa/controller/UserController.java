@@ -1,14 +1,17 @@
 package com.bootcamp3.MoonlightHotelAndSpa.controller;
 
 import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.user.*;
+import com.bootcamp3.MoonlightHotelAndSpa.converter.CarTransferConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.TableReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.UserConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.restaurant.TableReservationResponse;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.transfer.CarTransferResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.user.*;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.UserNotFoundException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
+import com.bootcamp3.MoonlightHotelAndSpa.model.car.CarTransfer;
 import com.bootcamp3.MoonlightHotelAndSpa.model.table.TableReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.TableReservationService;
@@ -26,7 +29,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.*;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_SUBJECT;
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_TEXT;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_CREDENTIALS;
 
 @RestController
@@ -179,5 +183,41 @@ public class UserController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/transfers")
+    public ResponseEntity<List<CarTransferResponse>> getCarTransfersByUserId(@PathVariable Long id) {
+
+        List<CarTransfer> carTransfers = userServiceImpl.getCarTransfers(id);
+
+        List<CarTransferResponse> carTransferResponseList = carTransfers
+                .stream()
+                .map(CarTransferConverter::convertToCarTransferResponse)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(carTransferResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/transfers")
+    public ResponseEntity<List<CarTransferResponse>> getAllCarTransfers() {
+
+        List<CarTransfer> carTransfers = userServiceImpl.getAllCarTransfers();
+
+        List<CarTransferResponse> carTransferResponseList = carTransfers
+                .stream()
+                .map(CarTransferConverter::convertToCarTransferResponse)
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(carTransferResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/transfers/{tid}")
+    public ResponseEntity<CarTransferResponse> getCatTransferByIdAndUserId(@PathVariable Long id, @PathVariable Long tid) {
+
+        CarTransfer foundCarTransfer = userServiceImpl.getCarTransferByIdAndUserId(id, tid);
+
+        CarTransferResponse carTransferResponse = CarTransferConverter.convertToCarTransferResponse(foundCarTransfer);
+
+        return new ResponseEntity<>(carTransferResponse, HttpStatus.OK);
     }
 }

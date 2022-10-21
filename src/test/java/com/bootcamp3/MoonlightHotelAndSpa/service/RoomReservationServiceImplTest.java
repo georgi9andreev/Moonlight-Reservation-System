@@ -4,6 +4,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.RoomReservationRepository;
+import com.bootcamp3.MoonlightHotelAndSpa.service.EmailService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.impl.RoomReservationServiceImpl;
@@ -31,6 +32,9 @@ public class RoomReservationServiceImplTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private EmailService emailService;
+
     private RoomService roomService;
 
     @Mock
@@ -38,7 +42,7 @@ public class RoomReservationServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        roomReservationService = new RoomReservationServiceImpl(roomReservationRepository, userService, roomService);
+        roomReservationService = new RoomReservationServiceImpl(roomReservationRepository, userService, roomService, emailService);
     }
 
     @Test

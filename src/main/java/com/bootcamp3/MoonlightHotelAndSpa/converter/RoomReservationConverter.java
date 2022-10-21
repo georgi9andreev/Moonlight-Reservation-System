@@ -6,7 +6,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationRequest;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
-import com.bootcamp3.MoonlightHotelAndSpa.enumeration.ReservationPaymentStatus;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.PaymentStatus;
 import com.bootcamp3.MoonlightHotelAndSpa.model.Room;
 import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
@@ -119,7 +119,7 @@ public class RoomReservationConverter {
         roomReservation.setCheckOut(endDate);
         roomReservation.setAdults(userReservationRequest.getAdults());
         roomReservation.setKids(userReservationRequest.getKids());
-        roomReservation.setStatus(ReservationPaymentStatus.PAID);
+        roomReservation.setStatus(PaymentStatus.PAID);
         roomReservation.setFacilities(userReservationRequest.getType_bed());
         roomReservation.setTotalPrice(totalPrice);
         roomReservation.setRoom(room);
@@ -128,7 +128,7 @@ public class RoomReservationConverter {
         return roomReservation;
     }
 
-    private static Integer calculateDays(Instant startDate, Instant endDate) {
+    public static Integer calculateDays(Instant startDate, Instant endDate) {
 
         Long duration = Duration.between(startDate, endDate).toDays();
 

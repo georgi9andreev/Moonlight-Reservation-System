@@ -4,6 +4,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.RoomReservationConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.room.RoomResponse;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.user.UserReservationRequest;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.PaymentStatus;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomType;
 import com.bootcamp3.MoonlightHotelAndSpa.enumeration.RoomView;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
@@ -12,6 +13,7 @@ import com.bootcamp3.MoonlightHotelAndSpa.model.RoomReservation;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.errormessage.ReservationErrorMessage;
 import com.bootcamp3.MoonlightHotelAndSpa.repository.RoomReservationRepository;
+import com.bootcamp3.MoonlightHotelAndSpa.service.EmailService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomReservationService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.RoomService;
 import com.bootcamp3.MoonlightHotelAndSpa.service.UserService;
@@ -24,12 +26,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static com.bootcamp3.MoonlightHotelAndSpa.constant.EmailConstant.EMAIL_SUBJECT_PAYMENT;
 import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM_RESERVATION_NOT_FOUND;
 
 @Service
@@ -38,12 +39,14 @@ public class RoomReservationServiceImpl implements RoomReservationService {
     private final RoomReservationRepository roomReservationRepository;
     private final UserService userService;
     private final RoomService roomService;
+    private final EmailService emailService;
 
     @Autowired
-    public RoomReservationServiceImpl(RoomReservationRepository roomReservationRepository, UserService userService, RoomService roomService) {
+    public RoomReservationServiceImpl(RoomReservationRepository roomReservationRepository, UserService userService, RoomService roomService, EmailService emailService) {
         this.roomReservationRepository = roomReservationRepository;
         this.userService = userService;
         this.roomService = roomService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -183,6 +186,37 @@ public class RoomReservationServiceImpl implements RoomReservationService {
         save(updatedRoomReservation);
 
         return updatedRoomReservation;
+    }
+
+    @Override
+    public void changeRoomReservationPaymentStatus(Long rid) {
+        RoomReservation foundRoomReservation = findById(rid);
+        foundRoomReservation.setStatus(PaymentStatus.PAID);
+        roomReservationRepository.save(foundRoomReservation);
+
+        sendPaymentInformationToUserEmail(foundRoomReservation.getUser(), foundRoomReservation);
+    }
+
+    private void sendPaymentInformationToUserEmail(User user, RoomReservation roomReservation) {
+
+        int days = RoomReservationConverter.calculateDays(roomReservation.getCheckIn(), roomReservation.getCheckOut());
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("TotalPrice", roomReservation.getTotalPrice());
+        model.put("RoomType", roomReservation.getRoom().getTitle().toString());
+        model.put("Days", days);
+        model.put("View", roomReservation.getRoom().getRoomView().toString());
+        model.put("BedType", roomReservation.getFacilities());
+        model.put("Adults", roomReservation.getAdults());
+        model.put("Kids", roomReservation.getKids());
+        model.put("StartDate", roomReservation.getCheckIn());
+        model.put("EndDate", roomReservation.getCheckOut());
+        model.put("Name", user.getFirstName() + " " + user.getLastName());
+        model.put("Address", "Some address");
+        model.put("Phone", user.getPhoneNumber());
+        model.put("email", user.getEmail());
+
+        emailService.sendHtmlEmail(user.getEmail(), EMAIL_SUBJECT_PAYMENT, model);
     }
 
     private List<Room> filterBy(List<Room> rooms, Predicate<Room> predicate) {

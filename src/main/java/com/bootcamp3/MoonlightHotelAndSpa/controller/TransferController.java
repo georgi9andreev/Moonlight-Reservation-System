@@ -4,15 +4,16 @@ import com.bootcamp3.MoonlightHotelAndSpa.annotation.openapidocs.transfer.*;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.CarCategoryConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.CarConverter;
 import com.bootcamp3.MoonlightHotelAndSpa.converter.CarTransferConverter;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.CreateOrder;
+import com.bootcamp3.MoonlightHotelAndSpa.dto.PaymentDto;
 import com.bootcamp3.MoonlightHotelAndSpa.dto.transfer.*;
+import com.bootcamp3.MoonlightHotelAndSpa.enumeration.ClassType;
 import com.bootcamp3.MoonlightHotelAndSpa.exception.RecordNotFoudException;
 import com.bootcamp3.MoonlightHotelAndSpa.model.User;
 import com.bootcamp3.MoonlightHotelAndSpa.model.car.Car;
 import com.bootcamp3.MoonlightHotelAndSpa.model.car.CarCategory;
 import com.bootcamp3.MoonlightHotelAndSpa.model.car.CarTransfer;
-import com.bootcamp3.MoonlightHotelAndSpa.service.CarCategoryService;
-import com.bootcamp3.MoonlightHotelAndSpa.service.CarService;
-import com.bootcamp3.MoonlightHotelAndSpa.service.CarTransferService;
+import com.bootcamp3.MoonlightHotelAndSpa.service.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,12 +35,14 @@ public class TransferController {
     private final CarCategoryService carCategoryService;
     private final CarService carService;
     private final CarTransferService carTransferService;
+    private final PaymentService paymentService;
 
     @Autowired
-    public TransferController(CarCategoryService carCategoryService, CarService carService, CarTransferService carTransferService) {
+    public TransferController(CarCategoryService carCategoryService, CarService carService, CarTransferService carTransferService, PaymentService paymentService) {
         this.carCategoryService = carCategoryService;
         this.carService = carService;
         this.carTransferService = carTransferService;
+        this.paymentService = paymentService;
     }
 
     @PostMapping(value = "categories")
@@ -149,5 +153,34 @@ public class TransferController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(carResponses, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/capture")
+    public String captureOrder(@RequestParam String token, @RequestParam String carTransferId){
+        long carTransferIdAsLong = Long.parseLong(carTransferId);
+
+        paymentService.captureOrder(token, carTransferIdAsLong);
+        carTransferService.changeCarTransferPaymentStatus(carTransferIdAsLong);
+
+        return "redirect: orders";
+    }
+
+    @PostMapping(value = "/pay")
+    public String placeOrder(@RequestParam Long id, HttpServletRequest request){
+
+        CarTransfer carTransfer = carTransferService.findCarTransferById(id);
+
+        PaymentDto payment = PaymentDto.builder()
+                .id(id)
+                .classTypeId(ClassType.CAR_TRANSFER.getValue)
+                .description("Car transfer")
+                .itemDescription("Transfer")
+                .totalAmount(carTransfer.getPrice())
+                .capturePath("/cars/capture")
+                .build();
+
+        CreateOrder createOrder = paymentService.createOrder(payment, request);
+
+        return createOrder.getApprovalLink().toString();
     }
 }
