@@ -36,6 +36,7 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.BAD_
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Users", description = "Actions with Users")
+@CrossOrigin()
 public class UserController {
 
     private final UserServiceImpl userServiceImpl;

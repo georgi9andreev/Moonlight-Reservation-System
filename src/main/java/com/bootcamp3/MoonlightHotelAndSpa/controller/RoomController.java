@@ -37,6 +37,7 @@ import static com.bootcamp3.MoonlightHotelAndSpa.constant.ExceptionConstant.ROOM
 @RestController
 @RequestMapping(value = "/rooms", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Rooms", description = "Actions with Rooms")
+@CrossOrigin()
 public class RoomController {
 
     private final RoomService roomService;
