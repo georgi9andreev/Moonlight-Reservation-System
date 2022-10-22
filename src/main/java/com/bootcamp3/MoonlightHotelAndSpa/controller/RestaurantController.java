@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/tables", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Restaurant", description = "Actions with Restaurant tables")
+@CrossOrigin()
 public class RestaurantController {
 
     private final TableService tableService;

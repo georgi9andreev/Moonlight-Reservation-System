@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "cars", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Transfers", description = "Actions with Transfers")
+@CrossOrigin()
 public class TransferController {
 
     private final CarCategoryService carCategoryService;
